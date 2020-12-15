@@ -54,7 +54,7 @@ type UserInfoRes struct {
 }
 
 //Commonres 通用回应
-type Commonres struct {
+type CommonRes struct {
 	State string
 	Data  string
 }

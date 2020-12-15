@@ -1,17 +1,11 @@
 package controllers
 
 import(
-	"errors"
-	"regexp"
-
-	"gopkg.in/mgo.v2"
-	"gopkg.in/mgo.v2/bson"
 
 	"github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/sessions"
 
 	"github.com/yilin0041/project_app/models"
-	"github.com/yilin0041/project_app/service"
 )
 
 type UsersController struct {
@@ -28,16 +22,16 @@ type RegisterReq struct {
 }
 
 //PostLogin POST /user/register 用户注册
-func (c *UsersController) PostRegister() (res CommonRes){
+func (c *UsersController) PostRegister() (res models.CommonRes){
 	req := RegisterReq{}
 	if err := c.Ctx.ReadJSON(&req); err != nil {
-		res.State = StatusBadReq
+		res.State = models.StatusBadReq
 	}
 	if err := c.Model.Register(req.Name, req.Password, req.Email); err != nil {
 		res.State = err.Error()
 	} else {
 		//c.Session.Set("name", req.Name)
-		res.State = StatusSuccess
+		res.State = models.StatusSuccess
 	}
 	return
 }
@@ -49,27 +43,27 @@ type LoginReq struct {
 }
 
 //PostLogin POST /user/login 用户登陆
-func (c *UsersController) PostLogin() (res CommonRes){
+func (c *UsersController) PostLogin() (res models.CommonRes){
 	req := LoginReq{}
 	err := c.Ctx.ReadJSON(&req)
 	if err != nil || req.Name == "" || req.Password == "" {
-		res.State = StatusBadReq
+		res.State = models.StatusBadReq
 		return
 	}
-	err := c.Model.Login(req.Name, req.Password)
+	userID,err := c.Model.Login(req.Name, req.Password)
 	if err != nil {
 		res.State = err.Error()
 	} else {
 		c.Session.Set("id", userID)
-		res.State = StatusSuccess
+		res.State = models.StatusSuccess
 	}
 	return	
 }
 
 //PostLogout POST /user/logout 退出登陆 
-func (c *UsersController) PostLogout() (res CommonRes){
+func (c *UsersController) PostLogout() (res models.CommonRes){
 	c.Session.Delete("id")
-	res.State = StatusSuccess
+	res.State = models.StatusSuccess
 	return
 }
 
@@ -79,31 +73,31 @@ type NameReq struct {
 }
 
 //PostName POST /user/name 更新用户名
-func (c *UsersController) PostName() (res CommonRes){
+func (c *UsersController) PostName() (res models.CommonRes){
 	if c.Session.Get("id") == nil {
-		res.State = StatusNotLogin
+		res.State = models.StatusNotLogin
 		return
 	}
 	req := NameReq{}
 	err := c.Ctx.ReadJSON(&req)
 	if err != nil || req.Name == "" {
-		res.State = StatusBadReq
+		res.State = models.StatusBadReq
 		return
 	}
-	err := c.Model.SetUserName(c.Session.GetString("id"), req.Name)
+	err = c.Model.SetUserName(c.Session.GetString("id"), req.Name)
 	if err != nil {
 		res.State = err.Error()
 	} else {
-		res.State = StatusSuccess
+		res.State = models.StatusSuccess
 	}
 	return	
 }
 
 //GetInfo GET /user/info/{userID:string}
-func (c *UsersController) GetInfoBy(id string) (res UserInfoRes){
+func (c *UsersController) GetInfoBy(id string) (res models.UserInfoRes){
 	if id=="self"{
 		if c.Session.Get("id") == nil {
-			res.State = StatusNotLogin
+			res.State = models.StatusNotLogin
 			return
 		}
 		id = c.Session.GetString("id")
@@ -114,7 +108,7 @@ func (c *UsersController) GetInfoBy(id string) (res UserInfoRes){
 	if err != nil {
 		res.State = err.Error()
 	} else {
-		res.State = StatusSuccess
+		res.State = models.StatusSuccess
 	}
 	return	
 }
