@@ -4,7 +4,7 @@
  * @Author: sunylin
  * @Date: 2020-12-14 23:13:17
  * @LastEditors: sunylin
- * @LastEditTime: 2020-12-15 18:09:37
+ * @LastEditTime: 2020-12-15 19:32:00
  */
 package models
 
@@ -18,19 +18,11 @@ const (
 	StatusUserNameExist    = "username_exist"
 	StatusUserNameNotExist = "username_notexist"
 	StatusEmailExist       = "email_exist"
+	StatusEmailFormatError = "email_format_error"
 	StatusPasswordError    = "password_error"
-)
-
-//Error
-const (
-	ErrorNoID          = "no_this_id"
-	ErrorEmptyName     = "name_nil"
-	ErrorEmptyEmail    = "email_nil"
-	ErrorEmailFormat   = "email_format_error"
-	ErrorExistName     = "exist_username"
-	ErrorExistEmail    = "exist_email"
-	ErrorNoUser        = "no_this_user"
-	ErrorWrongPassword = "wrong_password"
+	StatusNoID             = "no_this_id"
+	StatusEmptyName        = "name_nil"
+	StatusEmptyEmail       = "email_nil"
 )
 
 //User
@@ -55,9 +47,9 @@ type UserInfo struct {
 
 //UserInfoRes 获取用户信息的回应
 type UserInfoRes struct {
+	State string
 	ID    string
 	Email string
-	Name  string
 	Info  UserInfo
 }
 
