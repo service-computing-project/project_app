@@ -1,7 +1,6 @@
 package controllers
 
-import(
-
+import (
 	"github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/sessions"
 
@@ -10,7 +9,7 @@ import(
 
 type UsersController struct {
 	Ctx     iris.Context
-	Model *models.UserDB
+	Model   models.UserDB
 	Session *sessions.Session
 }
 
@@ -22,7 +21,7 @@ type RegisterReq struct {
 }
 
 //PostLogin POST /user/register 用户注册
-func (c *UsersController) PostRegister() (res models.CommonRes){
+func (c *UsersController) PostRegister() (res models.CommonRes) {
 	req := RegisterReq{}
 	if err := c.Ctx.ReadJSON(&req); err != nil {
 		res.State = models.StatusBadReq
@@ -43,25 +42,25 @@ type LoginReq struct {
 }
 
 //PostLogin POST /user/login 用户登陆
-func (c *UsersController) PostLogin() (res models.CommonRes){
+func (c *UsersController) PostLogin() (res models.CommonRes) {
 	req := LoginReq{}
 	err := c.Ctx.ReadJSON(&req)
 	if err != nil || req.Name == "" || req.Password == "" {
 		res.State = models.StatusBadReq
 		return
 	}
-	userID,err := c.Model.Login(req.Name, req.Password)
+	userID, err := c.Model.Login(req.Name, req.Password)
 	if err != nil {
 		res.State = err.Error()
 	} else {
 		c.Session.Set("id", userID)
 		res.State = models.StatusSuccess
 	}
-	return	
+	return
 }
 
-//PostLogout POST /user/logout 退出登陆 
-func (c *UsersController) PostLogout() (res models.CommonRes){
+//PostLogout POST /user/logout 退出登陆
+func (c *UsersController) PostLogout() (res models.CommonRes) {
 	c.Session.Delete("id")
 	res.State = models.StatusSuccess
 	return
@@ -73,7 +72,7 @@ type NameReq struct {
 }
 
 //PostName POST /user/name 更新用户名
-func (c *UsersController) PostName() (res models.CommonRes){
+func (c *UsersController) PostName() (res models.CommonRes) {
 	if c.Session.Get("id") == nil {
 		res.State = models.StatusNotLogin
 		return
@@ -90,18 +89,18 @@ func (c *UsersController) PostName() (res models.CommonRes){
 	} else {
 		res.State = models.StatusSuccess
 	}
-	return	
+	return
 }
 
 //GetInfo GET /user/info/{userID:string}
-func (c *UsersController) GetInfoBy(id string) (res models.UserInfoRes){
-	if id=="self"{
+func (c *UsersController) GetInfoBy(id string) (res models.UserInfoRes) {
+	if id == "self" {
 		if c.Session.Get("id") == nil {
 			res.State = models.StatusNotLogin
 			return
 		}
 		id = c.Session.GetString("id")
-		
+
 	}
 	userinfores, err := c.Model.GetUserInfo(c.Session.GetString("id"))
 	res = userinfores
@@ -110,7 +109,5 @@ func (c *UsersController) GetInfoBy(id string) (res models.UserInfoRes){
 	} else {
 		res.State = models.StatusSuccess
 	}
-	return	
+	return
 }
-
-      
