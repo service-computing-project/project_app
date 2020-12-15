@@ -4,7 +4,7 @@
  * @Author: sunylin
  * @Date: 2020-12-15 02:41:11
  * @LastEditors: sunylin
- * @LastEditTime: 2020-12-15 17:52:37
+ * @LastEditTime: 2020-12-15 19:32:42
  */
 package models
 
@@ -24,27 +24,27 @@ type UserDB struct {
 //AddUser 添加用户,返回新用户ID和错误信息
 func (m *UserDB) AddUser(email, pwd, name, avatar, bio string, gender int) (newUser bson.ObjectId, err error) {
 	if len(name) == 0 {
-		return "", errors.New(ErrorEmptyName)
+		return "", errors.New(StatusEmptyName)
 	}
 	if len(email) == 0 {
-		return "", errors.New(ErrorEmptyEmail)
+		return "", errors.New(StatusEmptyEmail)
 	}
 	if !verifyEmailFormat(email) {
-		return "", errors.New(ErrorEmailFormat)
+		return "", errors.New(StatusEmailFormatError)
 	}
 	Validname, err := m.validName(name)
 	if err != nil {
 		return "", err
 	}
 	if !Validname {
-		return "", errors.New(ErrorExistName)
+		return "", errors.New(StatusUserNameExist)
 	}
 	Validemail, err := m.validEmail(email)
 	if err != nil {
 		return "", err
 	}
 	if !Validemail {
-		return "", errors.New(ErrorExistEmail)
+		return "", errors.New(StatusEmailExist)
 	}
 	newUser = bson.NewObjectId()
 	err = m.DB.Insert(&User{
@@ -64,7 +64,7 @@ func (m *UserDB) AddUser(email, pwd, name, avatar, bio string, gender int) (newU
 //SetUserInfo 设置用户信息
 func (m *UserDB) SetUserInfo(id string, info UserInfo) error {
 	if !bson.IsObjectIdHex(id) {
-		return errors.New(ErrorNoID)
+		return errors.New(StatusNoID)
 	}
 	return m.DB.UpdateId(bson.ObjectIdHex(id), bson.M{"$set": bson.M{"info": info}})
 }
@@ -97,7 +97,7 @@ func verifyEmailFormat(email string) bool {
 // SetUserName 设置用户名
 func (m *UserDB) SetUserName(id, name string) error {
 	if !bson.IsObjectIdHex(id) {
-		return errors.New(ErrorNoID)
+		return errors.New(StatusNoID)
 	}
 	isValid, err := m.validName(name)
 	if err != nil {
@@ -106,7 +106,7 @@ func (m *UserDB) SetUserName(id, name string) error {
 	if isValid {
 		return m.DB.UpdateId(bson.ObjectIdHex(id), bson.M{"$set": bson.M{"info.name": name}})
 	}
-	return errors.New(ErrorExistName)
+	return errors.New(StatusUserNameExist)
 }
 
 // GetUserByID 根据ID查询用户
@@ -121,34 +121,47 @@ func (m *UserDB) GetUserByID(id string) (User, error) {
 }
 
 //Login 登陆
-func (m *UserDB) Login(username, pwd string) (bool, error) {
+func (m *UserDB) Login(username, pwd string) (string, error) {
 	count, err := m.DB.Find(bson.M{"info.name": username}).Count()
 	if err != nil {
-		return false, err
+		return "", err
 	}
 	if count == 0 {
-		return false, errors.New(ErrorNoUser)
+		return "", errors.New(StatusUserNameNotExist)
 	}
 	type password struct {
-		pwd string `bson:"password"`
+		pwd string        `bson:"password"`
+		ID  bson.ObjectId `bson:"_id"`
 	}
 	var p password
-	err = m.DB.Find(bson.M{"info.name": username}).Select(bson.M{"password": 1}).One(&p)
+	err = m.DB.Find(bson.M{"info.name": username}).Select(bson.M{"password": 1, "_id": 1}).One(&p)
 	if err != nil {
-		return false, err
+		return "", err
 	}
 	if p.pwd == pwd {
-		return true, nil
+		return p.ID.Hex(), nil
 	}
-	err = errors.New(ErrorWrongPassword)
-	return false, err
+	err = errors.New(StatusPasswordError)
+	return "", err
 }
 
 //Register 注册
-func (m *UserDB) Register(username, pwd, email string) (state bool, err error) {
+func (m *UserDB) Register(username, pwd, email string) (err error) {
 	_, err = m.AddUser(email, pwd, username, "", "个性签名", 0)
 	if err != nil {
-		return false, err
+		return err
 	}
-	return true, nil
+	return nil
+}
+
+//GetUserInfo 获取用户信息
+func (m *UserDB) GetUserInfo(id string) (res UserInfoRes, err error) {
+	user, err := m.GetUserByID(id)
+	if err != nil {
+		return
+	}
+	res.ID = id
+	res.Email = user.Email
+	res.Info = user.Info
+	return
 }
