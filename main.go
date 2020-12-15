@@ -1,3 +1,11 @@
+/*
+ * @Descripttion:
+ * @version:
+ * @Author: sunylin
+ * @Date: 2020-12-15 02:53:22
+ * @LastEditors: sunylin
+ * @LastEditTime: 2020-12-15 17:21:48
+ */
 package main
 
 import (
@@ -12,7 +20,11 @@ func main() {
 	if err != nil {
 		fmt.Println("error")
 	}
-	var user models.UserModel
+	var user models.UserDB
 	user.DB = sesson.DB("project").C("user")
-	user.AddUser("10@12.com", "test", "", "test bio", 1)
+	myid, err := user.AddUser("10@12.com", "123", "test", "", "test bio", 1)
+	if err != nil {
+		fmt.Println(err)
+	}
+	user.SetUserName(myid.Hex(), "change2")
 }

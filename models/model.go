@@ -13,11 +13,24 @@ const (
 	StatusPasswordError    = "password_error"
 )
 
+//Error
+const (
+	ErrorNoID          = "no_this_id"
+	ErrorEmptyName     = "name_nil"
+	ErrorEmptyEmail    = "email_nil"
+	ErrorEmailFormat   = "email_format_error"
+	ErrorExistName     = "exist_username"
+	ErrorExistEmail    = "exist_email"
+	ErrorNoUser        = "no_this_user"
+	ErrorWrongPassword = "wrong_password"
+)
+
 //User
 
 //User 用户信息
 type User struct {
 	ID           bson.ObjectId `bson:"_id"`          // 用户ID
+	pwd          string        `bson:"password"`     //用户密码
 	Email        string        `bson:"email"`        // 用户唯一邮箱
 	Info         UserInfo      `bson:"info"`         // 用户个性信息
 	LikeCount    int64         `bson:"likeCount"`    // 被点赞数
@@ -35,10 +48,8 @@ type UserInfo struct {
 //UserInfoRes 获取用户信息的回应
 type UserInfoRes struct {
 	ID    string
-	State string
 	Email string
 	Name  string
-	Class int
 	Info  UserInfo
 }
 
