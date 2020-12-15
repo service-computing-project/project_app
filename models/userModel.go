@@ -1,3 +1,11 @@
+/*
+ * @Descripttion:user的数据库调用
+ * @version:1.0
+ * @Author: sunylin
+ * @Date: 2020-12-15 02:41:11
+ * @LastEditors: sunylin
+ * @LastEditTime: 2020-12-15 17:52:37
+ */
 package models
 
 import (
@@ -134,4 +142,13 @@ func (m *UserDB) Login(username, pwd string) (bool, error) {
 	}
 	err = errors.New(ErrorWrongPassword)
 	return false, err
+}
+
+//Register 注册
+func (m *UserDB) Register(username, pwd, email string) (state bool, err error) {
+	_, err = m.AddUser(email, pwd, username, "", "个性签名", 0)
+	if err != nil {
+		return false, err
+	}
+	return true, nil
 }
