@@ -1,3 +1,11 @@
+/*
+ * @Descripttion:
+ * @version:
+ * @Author: sunylin
+ * @Date: 2020-12-14 23:13:17
+ * @LastEditors: sunylin
+ * @LastEditTime: 2020-12-15 18:09:37
+ */
 package models
 
 import "gopkg.in/mgo.v2/bson"
@@ -51,6 +59,12 @@ type UserInfoRes struct {
 	Email string
 	Name  string
 	Info  UserInfo
+}
+
+//Commonres 通用回应
+type Commonres struct {
+	State string
+	Data  string
 }
 
 //content
