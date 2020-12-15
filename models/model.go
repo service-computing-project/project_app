@@ -4,7 +4,7 @@
  * @Author: sunylin
  * @Date: 2020-12-14 23:13:17
  * @LastEditors: sunylin
- * @LastEditTime: 2020-12-15 19:32:00
+ * @LastEditTime: 2020-12-15 20:12:31
  */
 package models
 
@@ -70,6 +70,32 @@ type Content struct {
 	LikeNum     int64         `bson:"likeNum"`     // 点赞数
 	Public      bool          `bson:"public"`      // 是否公开
 	Tag         []string      `bson:"tag"`         // 标签
+}
+
+//ContentUserInfo 用于返回详情中的的用户信息
+type ContentUserInfo struct {
+	Name   string `bson:"name"`   // 用户昵称
+	Avatar string `bson:"avatar"` // 头像URL
+	Gender int    `bson:"gender"` // 性别
+}
+
+//ContentDetailres 返回详情
+type ContentDetailres struct {
+	State string          //状态
+	Data  Content         //文档数据
+	User  ContentUserInfo //用户数据（这里少一个bio字段）
+}
+
+//ContentPublicList 返回公共文章
+type ContentPublicList struct {
+	State string
+	Data  []ContentDetailres
+}
+
+//ContentListByUser 根据用户返回文章
+type ContentListByUser struct {
+	State string
+	Data  []Content
 }
 
 //like
