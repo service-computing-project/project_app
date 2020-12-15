@@ -103,7 +103,7 @@ func (c *UsersController) GetInfoBy(id string) (res models.UserInfoRes){
 		id = c.Session.GetString("id")
 		
 	}
-	userinfores, err := c.Model.GetUserInfo(c.Session.GetString("id"))
+	userinfores, err := c.Model.GetUserInfo(id)
 	res = userinfores
 	if err != nil {
 		res.State = err.Error()

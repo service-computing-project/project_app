@@ -4,7 +4,7 @@ import (
 	"github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/mvc"
 	"github.com/yilin0041/project_app/controllers"
-	"github.com/yilin0041/project_app/service"
+	//"github.com/yilin0041/project_app/service"
 )
 
 func main() {
