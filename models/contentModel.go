@@ -4,7 +4,7 @@
  * @Author: sunylin
  * @Date: 2020-12-15 17:25:48
  * @LastEditors: sunylin
- * @LastEditTime: 2020-12-17 03:18:57
+ * @LastEditTime: 2020-12-17 03:22:51
  */
 package models
 
@@ -71,16 +71,16 @@ func (m *ContentDB) GetDetailByID(id string) (res ContentDetailres, err error) {
 //GetPublic 获取公共内容
 func (m *ContentDB) GetPublic() (res ContentPublicList, err error) {
 	type AllContentID struct {
-		Allid []bson.ObjectId
+		Allid bson.ObjectId
 	}
-	var all AllContentID
+	var all []AllContentID
 	err = m.DB.Find(bson.M{"public": true}).Select(bson.M{"_id": 1}).All(&all)
 	if err != nil {
 		return
 	}
-	for _, value := range all.Allid {
+	for _, value := range all {
 		var data ContentDetailres
-		data, err = m.GetDetailByID(value.Hex())
+		data, err = m.GetDetailByID(value.Allid.Hex())
 		if err != nil {
 			return
 		}
@@ -92,19 +92,19 @@ func (m *ContentDB) GetPublic() (res ContentPublicList, err error) {
 //GetContentSelf 根据自己的用户id获取文章列表
 func (m *ContentDB) GetContentSelf(id string) (res ContentListByUser, err error) {
 	type tempC struct {
-		GetContent []Content
+		GetContent Content
 	}
-	var c tempC
+	var c []tempC
 	err = m.DB.Find(bson.M{"ownId": bson.ObjectIdHex(id)}).All(&c)
-	for _, value := range c.GetContent {
+	for _, value := range c {
 		var resc Contentres
-		resc.Detail = value.Detail
-		resc.ID = value.ID.Hex()
-		resc.OwnID = value.OwnID.Hex()
-		resc.PublishDate = value.PublishDate
-		resc.LikeNum = value.LikeNum
-		resc.Public = value.Public
-		resc.Tag = value.Tag
+		resc.Detail = value.GetContent.Detail
+		resc.ID = value.GetContent.ID.Hex()
+		resc.OwnID = value.GetContent.OwnID.Hex()
+		resc.PublishDate = value.GetContent.PublishDate
+		resc.LikeNum = value.GetContent.LikeNum
+		resc.Public = value.GetContent.Public
+		resc.Tag = value.GetContent.Tag
 		res.Data = append(res.Data, resc)
 	}
 
@@ -114,19 +114,19 @@ func (m *ContentDB) GetContentSelf(id string) (res ContentListByUser, err error)
 //GetContentByUser 获取他人的文章列表
 func (m *ContentDB) GetContentByUser(id string) (res ContentListByUser, err error) {
 	type tempC struct {
-		GetContent []Content
+		GetContent Content
 	}
-	var c tempC
+	var c []tempC
 	err = m.DB.Find(bson.M{"ownId": bson.ObjectIdHex(id), "public": true}).All(&c)
-	for _, value := range c.GetContent {
+	for _, value := range c {
 		var resc Contentres
-		resc.Detail = value.Detail
-		resc.ID = value.ID.Hex()
-		resc.OwnID = value.OwnID.Hex()
-		resc.PublishDate = value.PublishDate
-		resc.LikeNum = value.LikeNum
-		resc.Public = value.Public
-		resc.Tag = value.Tag
+		resc.Detail = value.GetContent.Detail
+		resc.ID = value.GetContent.ID.Hex()
+		resc.OwnID = value.GetContent.OwnID.Hex()
+		resc.PublishDate = value.GetContent.PublishDate
+		resc.LikeNum = value.GetContent.LikeNum
+		resc.Public = value.GetContent.Public
+		resc.Tag = value.GetContent.Tag
 		res.Data = append(res.Data, resc)
 	}
 	return
