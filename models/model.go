@@ -4,7 +4,7 @@
  * @Author: sunylin
  * @Date: 2020-12-14 23:13:17
  * @LastEditors: sunylin
- * @LastEditTime: 2020-12-16 00:47:07
+ * @LastEditTime: 2020-12-16 15:32:05
  */
 package models
 
@@ -23,6 +23,9 @@ const (
 	StatusNoID             = "no_this_id"
 	StatusEmptyName        = "name_nil"
 	StatusEmptyEmail       = "email_nil"
+	StatusLikeExist        = "like_exist"
+	StatusNoContent        = "no_this_content"
+	StatusNoUser           = "no_this_user"
 )
 
 //User
@@ -103,8 +106,8 @@ type ContentListByUser struct {
 //Like 点赞信息
 type Like struct {
 	ID        bson.ObjectId `bson:"_id"`
-	UserID    bson.ObjectId `bson:"userId"`        // 用户ID
-	ContentID bson.ObjectId `bson:"notifications"` // 内容ID
+	UserID    bson.ObjectId `bson:"userId"`    // 用户ID
+	ContentID bson.ObjectId `bson:"contentId"` // 内容ID
 }
 
 //notification
