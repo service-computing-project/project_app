@@ -4,7 +4,7 @@
  * @Author: sunylin
  * @Date: 2020-12-15 02:41:11
  * @LastEditors: sunylin
- * @LastEditTime: 2020-12-15 19:32:42
+ * @LastEditTime: 2020-12-16 00:48:32
  */
 package models
 
@@ -49,7 +49,7 @@ func (m *UserDB) AddUser(email, pwd, name, avatar, bio string, gender int) (newU
 	newUser = bson.NewObjectId()
 	err = m.DB.Insert(&User{
 		ID:    newUser,
-		pwd:   pwd,
+		Pwd:   pwd,
 		Email: email,
 		Info: UserInfo{
 			Name:   name,
@@ -130,7 +130,7 @@ func (m *UserDB) Login(username, pwd string) (string, error) {
 		return "", errors.New(StatusUserNameNotExist)
 	}
 	type password struct {
-		pwd string        `bson:"password"`
+		Pwd string        `bson:"password"`
 		ID  bson.ObjectId `bson:"_id"`
 	}
 	var p password
@@ -138,7 +138,7 @@ func (m *UserDB) Login(username, pwd string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	if p.pwd == pwd {
+	if p.Pwd == pwd {
 		return p.ID.Hex(), nil
 	}
 	err = errors.New(StatusPasswordError)

@@ -4,7 +4,7 @@
  * @Author: sunylin
  * @Date: 2020-12-14 23:13:17
  * @LastEditors: sunylin
- * @LastEditTime: 2020-12-15 20:12:31
+ * @LastEditTime: 2020-12-16 00:47:07
  */
 package models
 
@@ -30,7 +30,7 @@ const (
 //User 用户信息
 type User struct {
 	ID           bson.ObjectId `bson:"_id"`          // 用户ID
-	pwd          string        `bson:"password"`     //用户密码
+	Pwd          string        `bson:"password"`     //用户密码
 	Email        string        `bson:"email"`        // 用户唯一邮箱
 	Info         UserInfo      `bson:"info"`         // 用户个性信息
 	LikeCount    int64         `bson:"likeCount"`    // 被点赞数
@@ -54,7 +54,7 @@ type UserInfoRes struct {
 }
 
 //Commonres 通用回应
-type Commonres struct {
+type CommonRes struct {
 	State string
 	Data  string
 }
