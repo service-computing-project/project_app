@@ -4,7 +4,7 @@
  * @Author: sunylin
  * @Date: 2020-12-14 23:13:17
  * @LastEditors: sunylin
- * @LastEditTime: 2020-12-16 00:47:07
+ * @LastEditTime: 2020-12-16 17:09:43
  */
 package models
 
@@ -12,17 +12,22 @@ import "gopkg.in/mgo.v2/bson"
 
 //Status
 const (
-	StatusSuccess          = "success"
-	StatusBadReq           = "bad_req"
-	StatusNotLogin         = "not_login"
-	StatusUserNameExist    = "username_exist"
-	StatusUserNameNotExist = "username_notexist"
-	StatusEmailExist       = "email_exist"
-	StatusEmailFormatError = "email_format_error"
-	StatusPasswordError    = "password_error"
-	StatusNoID             = "no_this_id"
-	StatusEmptyName        = "name_nil"
-	StatusEmptyEmail       = "email_nil"
+	StatusSuccess           = "success"
+	StatusBadReq            = "bad_req"
+	StatusNotLogin          = "not_login"
+	StatusUserNameExist     = "username_exist"
+	StatusUserNameNotExist  = "username_notexist"
+	StatusEmailExist        = "email_exist"
+	StatusEmailFormatError  = "email_format_error"
+	StatusPasswordError     = "password_error"
+	StatusNoID              = "no_this_id"
+	StatusEmptyName         = "name_nil"
+	StatusEmptyEmail        = "email_nil"
+	StatusLikeExist         = "like_exist"
+	StatusLikeNotExist      = "like_not_exist"
+	StatusNoContent         = "no_this_content"
+	StatusNoUser            = "no_this_user"
+	StatusNotificationExist = "notification_exist"
 )
 
 //User
@@ -53,7 +58,7 @@ type UserInfoRes struct {
 	Info  UserInfo
 }
 
-//Commonres 通用回应
+//CommonRes 通用回应
 type CommonRes struct {
 	State string
 	Data  string
@@ -103,8 +108,8 @@ type ContentListByUser struct {
 //Like 点赞信息
 type Like struct {
 	ID        bson.ObjectId `bson:"_id"`
-	UserID    bson.ObjectId `bson:"userId"`        // 用户ID
-	ContentID bson.ObjectId `bson:"notifications"` // 内容ID
+	UserID    bson.ObjectId `bson:"userId"`    // 用户ID
+	ContentID bson.ObjectId `bson:"contentId"` // 内容ID
 }
 
 //notification
@@ -121,7 +126,7 @@ type NotificationDetail struct {
 	ID         bson.ObjectId `bson:"_id"`
 	CreateTime int64         `bson:"time"`
 	Content    string        `bson:"content"`  // 通知内容
-	SourceID   string        `bson:"sourceId"` // 源ID （点赞人）
-	TargetID   string        `bson:"targetId"` // 目标ID （点赞文章）
+	SourceID   bson.ObjectId `bson:"sourceId"` // 源ID （点赞用户）
+	TargetID   bson.ObjectId `bson:"targetId"` // 目标ID （被点赞用户）
 	Type       string        `bson:"type"`     // 类型：暂时只有like
 }
