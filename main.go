@@ -4,7 +4,7 @@
  * @Author: sunylin
  * @Date: 2020-12-15 22:38:08
  * @LastEditors: sunylin
- * @LastEditTime: 2020-12-16 01:56:01
+ * @LastEditTime: 2020-12-16 22:18:22
  */
 package main
 
@@ -14,9 +14,9 @@ import (
 	"github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/mvc"
 	"github.com/kataras/iris/v12/sessions"
-	"github.com/yilin0041/project_app/controllers"
-	"github.com/yilin0041/project_app/models"
-	"github.com/yilin0041/project_app/service"
+	"github.com/service-computing-project/project_app/controllers"
+	"github.com/service-computing-project/project_app/models"
+	"github.com/service-computing-project/project_app/service"
 )
 
 func main() {

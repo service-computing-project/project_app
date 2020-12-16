@@ -4,7 +4,7 @@ import (
 	"github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/sessions"
 
-	"github.com/yilin0041/project_app/models"
+	"github.com/service-computing-project/project_app/models"
 )
 
 type UsersController struct {
