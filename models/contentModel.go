@@ -4,7 +4,7 @@
  * @Author: sunylin
  * @Date: 2020-12-15 17:25:48
  * @LastEditors: sunylin
- * @LastEditTime: 2020-12-17 03:32:58
+ * @LastEditTime: 2020-12-17 03:44:12
  */
 package models
 
@@ -91,20 +91,17 @@ func (m *ContentDB) GetPublic() (res ContentPublicList, err error) {
 
 //GetContentSelf 根据自己的用户id获取文章列表
 func (m *ContentDB) GetContentSelf(id string) (res ContentListByUser, err error) {
-	type tempC struct {
-		GetContent Content
-	}
-	var c []tempC
+	var c []Content
 	err = m.DB.Find(bson.M{"ownId": bson.ObjectIdHex(id)}).All(&c)
 	for _, value := range c {
 		var resc Contentres
-		resc.Detail = value.GetContent.Detail
-		resc.ID = value.GetContent.ID.Hex()
-		resc.OwnID = value.GetContent.OwnID.Hex()
-		resc.PublishDate = value.GetContent.PublishDate
-		resc.LikeNum = value.GetContent.LikeNum
-		resc.Public = value.GetContent.Public
-		resc.Tag = value.GetContent.Tag
+		resc.Detail = value.Detail
+		resc.ID = value.ID.Hex()
+		resc.OwnID = value.OwnID.Hex()
+		resc.PublishDate = value.PublishDate
+		resc.LikeNum = value.LikeNum
+		resc.Public = value.Public
+		resc.Tag = value.Tag
 		res.Data = append(res.Data, resc)
 	}
 
@@ -113,20 +110,17 @@ func (m *ContentDB) GetContentSelf(id string) (res ContentListByUser, err error)
 
 //GetContentByUser 获取他人的文章列表
 func (m *ContentDB) GetContentByUser(id string) (res ContentListByUser, err error) {
-	type tempC struct {
-		GetContent Content
-	}
-	var c []tempC
+	var c []Content
 	err = m.DB.Find(bson.M{"ownId": bson.ObjectIdHex(id), "public": true}).All(&c)
 	for _, value := range c {
 		var resc Contentres
-		resc.Detail = value.GetContent.Detail
-		resc.ID = value.GetContent.ID.Hex()
-		resc.OwnID = value.GetContent.OwnID.Hex()
-		resc.PublishDate = value.GetContent.PublishDate
-		resc.LikeNum = value.GetContent.LikeNum
-		resc.Public = value.GetContent.Public
-		resc.Tag = value.GetContent.Tag
+		resc.Detail = value.Detail
+		resc.ID = value.ID.Hex()
+		resc.OwnID = value.OwnID.Hex()
+		resc.PublishDate = value.PublishDate
+		resc.LikeNum = value.LikeNum
+		resc.Public = value.Public
+		resc.Tag = value.Tag
 		res.Data = append(res.Data, resc)
 	}
 	return
