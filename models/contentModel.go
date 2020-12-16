@@ -4,7 +4,7 @@
  * @Author: sunylin
  * @Date: 2020-12-15 17:25:48
  * @LastEditors: sunylin
- * @LastEditTime: 2020-12-15 22:22:22
+ * @LastEditTime: 2020-12-17 03:01:18
  */
 package models
 
@@ -52,11 +52,19 @@ func (m *ContentDB) GetDetailByID(id string) (res ContentDetailres, err error) {
 		err = errors.New(StatusNoID)
 		return
 	}
-	err = m.DB.FindId(bson.ObjectIdHex(id)).One(&res.Data)
+	var c Content
+	err = m.DB.FindId(bson.ObjectIdHex(id)).One(&c)
 	if err != nil {
 		return
 	}
-	err = m.DBuser.FindId(res.Data.OwnID).Select(bson.M{"info.name": 1, "info.avatar": 1, "info.gender": 1}).One(&res.User)
+	res.Data.Detail = c.Detail
+	res.Data.ID = c.ID.Hex()
+	res.Data.OwnID = c.OwnID.Hex()
+	res.Data.PublishDate = c.PublishDate
+	res.Data.LikeNum = c.LikeNum
+	res.Data.Public = c.Public
+	res.Data.Tag = c.Tag
+	err = m.DBuser.FindId(c.OwnID).Select(bson.M{"info.name": 1, "info.avatar": 1, "info.gender": 1}).One(&res.User)
 	return
 }
 
@@ -80,12 +88,37 @@ func (m *ContentDB) GetPublic() (res ContentPublicList, err error) {
 
 //GetContentSelf 根据自己的用户id获取文章列表
 func (m *ContentDB) GetContentSelf(id string) (res ContentListByUser, err error) {
-	err = m.DB.Find(bson.M{"ownId": bson.ObjectIdHex(id)}).All(&res.Data)
+	var c []Content
+	err = m.DB.Find(bson.M{"ownId": bson.ObjectIdHex(id)}).All(&c)
+	for _, value := range c {
+		var resc Contentres
+		resc.Detail = value.Detail
+		resc.ID = value.ID.Hex()
+		resc.OwnID = value.OwnID.Hex()
+		resc.PublishDate = value.PublishDate
+		resc.LikeNum = value.LikeNum
+		resc.Public = value.Public
+		resc.Tag = value.Tag
+		res.Data = append(res.Data, resc)
+	}
+
 	return
 }
 
 //GetContentByUser 获取他人的文章列表
 func (m *ContentDB) GetContentByUser(id string) (res ContentListByUser, err error) {
-	err = m.DB.Find(bson.M{"ownId": bson.ObjectIdHex(id), "public": true}).All(&res.Data)
+	var c []Content
+	err = m.DB.Find(bson.M{"ownId": bson.ObjectIdHex(id), "public": true}).All(&c)
+	for _, value := range c {
+		var resc Contentres
+		resc.Detail = value.Detail
+		resc.ID = value.ID.Hex()
+		resc.OwnID = value.OwnID.Hex()
+		resc.PublishDate = value.PublishDate
+		resc.LikeNum = value.LikeNum
+		resc.Public = value.Public
+		resc.Tag = value.Tag
+		res.Data = append(res.Data, resc)
+	}
 	return
 }
