@@ -4,7 +4,7 @@
  * @Author: sunylin
  * @Date: 2020-12-15 17:25:48
  * @LastEditors: sunylin
- * @LastEditTime: 2020-12-17 03:22:51
+ * @LastEditTime: 2020-12-17 03:32:58
  */
 package models
 
@@ -71,7 +71,7 @@ func (m *ContentDB) GetDetailByID(id string) (res ContentDetailres, err error) {
 //GetPublic 获取公共内容
 func (m *ContentDB) GetPublic() (res ContentPublicList, err error) {
 	type AllContentID struct {
-		Allid bson.ObjectId
+		Allid bson.ObjectId `bson:"_id"`
 	}
 	var all []AllContentID
 	err = m.DB.Find(bson.M{"public": true}).Select(bson.M{"_id": 1}).All(&all)
