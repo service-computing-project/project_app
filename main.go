@@ -4,7 +4,7 @@
  * @Author: sunylin
  * @Date: 2020-12-15 22:38:08
  * @LastEditors: sunylin
- * @LastEditTime: 2020-12-16 22:18:22
+ * @LastEditTime: 2020-12-16 22:47:35
  */
 package main
 
@@ -42,7 +42,7 @@ func main() {
 
 	// Listens and serves incoming http requests
 	// on http://localhost:8080.
-	app.Listen(":8080")
+	app.Listen("0.0.0.0:8080")
 }
 
 func myMiddleware(ctx iris.Context) {
