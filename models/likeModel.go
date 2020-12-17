@@ -4,7 +4,7 @@
  * @Author: sunylin
  * @Date: 2020-12-16 15:03:45
  * @LastEditors: sunylin
- * @LastEditTime: 2020-12-17 16:44:25
+ * @LastEditTime: 2020-12-18 01:13:46
  */
 package models
 
@@ -56,7 +56,7 @@ func (m *LikeDB) LikeByID(Contentid, Userid string) (err error) {
 		return
 	}
 	type notificationTarget struct {
-		ContentOwner bson.ObjectId `bson:"_id"`
+		ContentOwner bson.ObjectId `bson:"ownId"`
 		Content      string        `bson:"detail"`
 	}
 	var n notificationTarget
