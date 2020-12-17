@@ -4,12 +4,12 @@ import (
 	"github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/sessions"
 	"github.com/globalsign/mgo/bson"
-	"github.com/yilin0041/project_app/models"
+	"github.com/service-computing-project/project_app/models"
 )
 
 type LikeController struct {
 	Ctx     iris.Context
-	Model   models.UserDB
+	Model   models.LikeDB
 	Session *sessions.Session
 }
 
@@ -22,7 +22,7 @@ type LikeRes struct {
 // GetBy Get /like/{contentID} 获取用户点赞列表
 func (c *LikeController) GetBy(id string) (res LikeRes){
 	if !bson.IsObjectIdHex(id) {
-		res.State = StatusBadReq
+		res.State = models.StatusBadReq
 		return
 	}
 	var err error
@@ -41,10 +41,10 @@ func (c *LikeController) PostBy(id string) (res models.CommonRes){
 		return
 	}
 	if !bson.IsObjectIdHex(id) {
-		res.State = StatusBadReq
+		res.State = models.StatusBadReq
 		return
 	}
-	err := c.Model.LikeByID(id,c.Session.Get("id"))
+	err := c.Model.LikeByID(id,c.Session.Get("id").(string))
 	if err != nil {
 		res.State = err.Error()
 	}
@@ -59,10 +59,10 @@ func (c *LikeController) PatchBy(id string) (res models.CommonRes){
 		return
 	}
 	if !bson.IsObjectIdHex(id) {
-		res.State = StatusBadReq
+		res.State = models.StatusBadReq
 		return
 	}
-	err := c.Model.CancelLikeByID(id,c.Session.Get("id"))
+	err := c.Model.CancelLikeByID(id,c.Session.Get("id").(string))
 	if err != nil {
 		res.State = err.Error()
 	}

@@ -4,7 +4,6 @@ import (
 	"github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/sessions"
 	"github.com/globalsign/mgo/bson"
-	//"github.com/yilin0041/project_app/models"
 	"github.com/service-computing-project/project_app/models"
 )
 
@@ -62,6 +61,10 @@ func (c *UsersController) PostLogin() (res models.CommonRes) {
 
 //PostLogout POST /user/logout 退出登陆
 func (c *UsersController) PostLogout() (res models.CommonRes) {
+	if c.Session.Get("id") == nil {
+		res.State = models.StatusNotLogin
+		return
+	}
 	c.Session.Delete("id")
 	res.State = models.StatusSuccess
 	return
@@ -102,9 +105,8 @@ func (c *UsersController) GetInfoBy(id string) (res models.UserInfoRes) {
 		}
 		id = c.Session.GetString("id")
 
-	}
-	else if !bson.IsObjectIdHex(id) {
-		res.State = StatusBadReq
+	}else if !bson.IsObjectIdHex(id) {
+		res.State = models.StatusBadReq
 		return
 	}
 	userinfores, err := c.Model.GetUserInfo(id)

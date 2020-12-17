@@ -28,6 +28,8 @@ func main() {
 	//创建数据库
 	var user models.UserDB
 	user.DB = sesson.DB("project").C("user")
+	var like models.LikeDB
+	user.DB = sesson.DB("project").C("like")
 	app := iris.Default()
 	app.Use(myMiddleware)
 
@@ -39,6 +41,10 @@ func main() {
 	users := mvc.New(app.Party("/user"))
 	users.Register(sess.Start)
 	users.Handle(&controllers.UsersController{Model: user})
+
+	likes := mvc.New(app.Party("/like"))
+	likes.Register(sess.Start)
+	likes.Handle(&controllers.LikeController{Model: like})
 
 	// Listens and serves incoming http requests
 	// on http://localhost:8080.
