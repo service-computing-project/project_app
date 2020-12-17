@@ -4,7 +4,7 @@
  * @Author: sunylin
  * @Date: 2020-12-14 23:13:17
  * @LastEditors: sunylin
- * @LastEditTime: 2020-12-16 17:34:25
+ * @LastEditTime: 2020-12-17 02:58:03
  */
 package models
 
@@ -77,6 +77,17 @@ type Content struct {
 	Tag         []string      `bson:"tag"`         // 标签
 }
 
+// Contentres 正文信息
+type Contentres struct {
+	ID          string   `bson:"_id"`
+	Detail      string   `bson:"detail"`      // 详情介绍
+	OwnID       string   `bson:"ownId"`       // 作者ID [索引]
+	PublishDate int64    `bson:"publishDate"` // 发布日期
+	LikeNum     int64    `bson:"likeNum"`     // 点赞数
+	Public      bool     `bson:"public"`      // 是否公开
+	Tag         []string `bson:"tag"`         // 标签
+}
+
 //ContentUserInfo 用于返回详情中的的用户信息
 type ContentUserInfo struct {
 	Name   string `bson:"name"`   // 用户昵称
@@ -87,7 +98,7 @@ type ContentUserInfo struct {
 //ContentDetailres 返回详情
 type ContentDetailres struct {
 	State string          //状态
-	Data  Content         //文档数据
+	Data  Contentres      //文档数据
 	User  ContentUserInfo //用户数据（这里少一个bio字段）
 }
 
@@ -100,7 +111,7 @@ type ContentPublicList struct {
 //ContentListByUser 根据用户返回文章
 type ContentListByUser struct {
 	State string
-	Data  []Content
+	Data  []Contentres
 }
 
 //like
