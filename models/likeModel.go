@@ -4,7 +4,7 @@
  * @Author: sunylin
  * @Date: 2020-12-16 15:03:45
  * @LastEditors: sunylin
- * @LastEditTime: 2020-12-17 15:50:35
+ * @LastEditTime: 2020-12-17 16:28:09
  */
 package models
 
@@ -56,8 +56,8 @@ func (m *LikeDB) LikeByID(Contentid, Userid string) (err error) {
 		return
 	}
 	type notificationTarget struct {
-		contentOwner bson.ObjectId
-		content      string
+		contentOwner bson.ObjectId `bson:"_id"`
+		content      string        `bson:"detail"`
 	}
 	var n notificationTarget
 	err = m.DBC.FindId(bson.ObjectIdHex(Contentid)).Select(bson.M{"ownId": 1, "detail": 1}).One(&n)
@@ -112,7 +112,7 @@ func (m *LikeDB) CancelLikeByID(Contentid, Userid string) (err error) {
 //GetUserListByContentID 通过文章id获取点赞的用户列表
 func (m *LikeDB) GetUserListByContentID(Contentid string) (user []string, err error) {
 	type TempUser struct {
-		UserID bson.ObjectId
+		UserID bson.ObjectId `bson:"_id"`
 	}
 	var userid []TempUser
 	c, err := m.DBC.FindId(bson.ObjectIdHex(Contentid)).Count()
