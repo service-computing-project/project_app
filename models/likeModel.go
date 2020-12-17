@@ -4,7 +4,7 @@
  * @Author: sunylin
  * @Date: 2020-12-16 15:03:45
  * @LastEditors: sunylin
- * @LastEditTime: 2020-12-17 16:28:09
+ * @LastEditTime: 2020-12-17 16:33:14
  */
 package models
 
@@ -56,15 +56,15 @@ func (m *LikeDB) LikeByID(Contentid, Userid string) (err error) {
 		return
 	}
 	type notificationTarget struct {
-		contentOwner bson.ObjectId `bson:"_id"`
-		content      string        `bson:"detail"`
+		ContentOwner bson.ObjectId `bson:"_id"`
+		Content      string        `bson:"detail"`
 	}
 	var n notificationTarget
 	err = m.DBC.FindId(bson.ObjectIdHex(Contentid)).Select(bson.M{"ownId": 1, "detail": 1}).One(&n)
 	if err != nil {
 		return
 	}
-	c, err = m.DBN.Find(bson.M{"sourceId": bson.ObjectIdHex(Userid), "targetId": n.contentOwner}).Count()
+	c, err = m.DBN.Find(bson.M{"sourceId": bson.ObjectIdHex(Userid), "targetId": n.ContentOwner}).Count()
 	if c != 0 {
 		err = errors.New(StatusNotificationExist)
 		return
@@ -73,9 +73,9 @@ func (m *LikeDB) LikeByID(Contentid, Userid string) (err error) {
 	err = m.DBN.Insert(&NotificationDetail{
 		ID:         newNotification,
 		CreateTime: time.Now().Unix() * 1000,
-		Content:    n.content,
+		Content:    n.Content,
 		SourceID:   bson.ObjectIdHex(Userid),
-		TargetID:   n.contentOwner,
+		TargetID:   n.ContentOwner,
 		Type:       "like",
 	})
 
