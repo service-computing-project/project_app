@@ -29,7 +29,11 @@ func main() {
 	var user models.UserDB
 	user.DB = sesson.DB("project").C("user")
 	var like models.LikeDB
-	user.DB = sesson.DB("project").C("like")
+	like.DBU = sesson.DB("project").C("user")
+	like.DBL = sesson.DB("project").C("like")
+	like.DBC = sesson.DB("project").C("content")
+	like.DBN = sesson.DB("project").C("notification")
+
 	app := iris.Default()
 	app.Use(myMiddleware)
 
