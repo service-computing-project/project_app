@@ -104,8 +104,7 @@ func (c *UsersController) GetInfoBy(id string) (res models.UserInfoRes) {
 			return
 		}
 		id = c.Session.GetString("id")
-
-	} else if !bson.IsObjectIdHex(id) {
+	}else if !bson.IsObjectIdHex(id) {
 		res.State = models.StatusBadReq
 		return
 	}

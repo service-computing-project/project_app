@@ -4,7 +4,7 @@
  * @Author: sunylin
  * @Date: 2020-12-14 23:13:17
  * @LastEditors: sunylin
- * @LastEditTime: 2020-12-17 02:58:03
+ * @LastEditTime: 2020-12-17 22:33:57
  */
 package models
 
@@ -12,22 +12,23 @@ import "gopkg.in/mgo.v2/bson"
 
 //Status
 const (
-	StatusSuccess           = "success"
-	StatusBadReq            = "bad_req"
-	StatusNotLogin          = "not_login"
-	StatusUserNameExist     = "username_exist"
-	StatusUserNameNotExist  = "username_notexist"
-	StatusEmailExist        = "email_exist"
-	StatusEmailFormatError  = "email_format_error"
-	StatusPasswordError     = "password_error"
-	StatusNoID              = "no_this_id"
-	StatusEmptyName         = "name_nil"
-	StatusEmptyEmail        = "email_nil"
-	StatusLikeExist         = "like_exist"
-	StatusLikeNotExist      = "like_not_exist"
-	StatusNoContent         = "no_this_content"
-	StatusNoUser            = "no_this_user"
-	StatusNotificationExist = "notification_exist"
+	StatusSuccess                = "success"
+	StatusBadReq                 = "bad_req"
+	StatusNotLogin               = "not_login"
+	StatusUserNameExist          = "username_exist"
+	StatusUserNameNotExist       = "username_notexist"
+	StatusEmailExist             = "email_exist"
+	StatusEmailFormatError       = "email_format_error"
+	StatusPasswordError          = "password_error"
+	StatusNoID                   = "no_this_id"
+	StatusEmptyName              = "name_nil"
+	StatusEmptyEmail             = "email_nil"
+	StatusLikeExist              = "like_exist"
+	StatusLikeNotExist           = "like_not_exist"
+	StatusNoContent              = "no_this_content"
+	StatusNoUser                 = "no_this_user"
+	StatusNotificationExist      = "notification_exist"
+	StatusUserContentNotMatching = "user_content_id_not_matching"
 )
 
 //User

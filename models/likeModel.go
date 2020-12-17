@@ -4,7 +4,7 @@
  * @Author: sunylin
  * @Date: 2020-12-16 15:03:45
  * @LastEditors: sunylin
- * @LastEditTime: 2020-12-16 17:03:49
+ * @LastEditTime: 2020-12-17 16:44:25
  */
 package models
 
@@ -56,15 +56,15 @@ func (m *LikeDB) LikeByID(Contentid, Userid string) (err error) {
 		return
 	}
 	type notificationTarget struct {
-		contentOwner bson.ObjectId
-		content      string
+		ContentOwner bson.ObjectId `bson:"_id"`
+		Content      string        `bson:"detail"`
 	}
 	var n notificationTarget
 	err = m.DBC.FindId(bson.ObjectIdHex(Contentid)).Select(bson.M{"ownId": 1, "detail": 1}).One(&n)
 	if err != nil {
 		return
 	}
-	c, err = m.DBN.Find(bson.M{"sourceId": bson.ObjectIdHex(Userid), "targetId": n.contentOwner}).Count()
+	c, err = m.DBN.Find(bson.M{"sourceId": bson.ObjectIdHex(Userid), "targetId": n.ContentOwner}).Count()
 	if c != 0 {
 		err = errors.New(StatusNotificationExist)
 		return
@@ -73,9 +73,9 @@ func (m *LikeDB) LikeByID(Contentid, Userid string) (err error) {
 	err = m.DBN.Insert(&NotificationDetail{
 		ID:         newNotification,
 		CreateTime: time.Now().Unix() * 1000,
-		Content:    n.content,
+		Content:    n.Content,
 		SourceID:   bson.ObjectIdHex(Userid),
-		TargetID:   n.contentOwner,
+		TargetID:   n.ContentOwner,
 		Type:       "like",
 	})
 
@@ -111,19 +111,22 @@ func (m *LikeDB) CancelLikeByID(Contentid, Userid string) (err error) {
 
 //GetUserListByContentID 通过文章id获取点赞的用户列表
 func (m *LikeDB) GetUserListByContentID(Contentid string) (user []string, err error) {
-	var userID []bson.ObjectId
+	type TempUser struct {
+		UserID bson.ObjectId `bson:"userId"`
+	}
+	var userid []TempUser
 	c, err := m.DBC.FindId(bson.ObjectIdHex(Contentid)).Count()
 	if c == 0 {
 		err = errors.New(StatusNoContent)
 		return
 	}
-	err = m.DBL.Find(bson.M{"contentId": bson.ObjectIdHex(Contentid)}).Select(bson.M{"contentId": 1}).All(&userID)
+	err = m.DBL.Find(bson.M{"contentId": bson.ObjectIdHex(Contentid)}).Select(bson.M{"userId": 1}).All(&userid)
 	if err != nil {
 		return
 	}
-	for _, value := range userID {
+	for _, value := range userid {
 		var likeUser User
-		err = m.DBU.FindId(value).One(&likeUser)
+		err = m.DBU.FindId(value.UserID).One(&likeUser)
 		if err != nil {
 			return
 		}
