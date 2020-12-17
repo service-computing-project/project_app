@@ -23,7 +23,7 @@ type ContentDB struct {
 }
 
 // AddContent 增加内容
-func (m *ContentDB) AddContent(detail string, tag []string, ownID string, isPublic bool) (bson.ObjectId, error) {
+func (m *ContentDB) AddContent(detail string, tag []string, ownID string, isPublic bool) error {
 	var content Content
 	content.ID = bson.NewObjectId()
 	content.Detail = detail
@@ -33,7 +33,7 @@ func (m *ContentDB) AddContent(detail string, tag []string, ownID string, isPubl
 	content.Public = isPublic
 	content.Tag = tag
 	err := m.DB.Insert(content)
-	return content.ID, err
+	return err
 }
 
 // RemoveContent 删除内容

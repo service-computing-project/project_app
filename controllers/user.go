@@ -3,7 +3,8 @@ package controllers
 import (
 	"github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/sessions"
-
+	"github.com/globalsign/mgo/bson"
+	//"github.com/yilin0041/project_app/models"
 	"github.com/service-computing-project/project_app/models"
 )
 
@@ -101,6 +102,10 @@ func (c *UsersController) GetInfoBy(id string) (res models.UserInfoRes) {
 		}
 		id = c.Session.GetString("id")
 
+	}
+	else if !bson.IsObjectIdHex(id) {
+		res.State = StatusBadReq
+		return
 	}
 	userinfores, err := c.Model.GetUserInfo(id)
 	res = userinfores
