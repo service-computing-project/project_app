@@ -4,7 +4,7 @@
  * @Author: sunylin
  * @Date: 2020-12-15 17:25:48
  * @LastEditors: sunylin
- * @LastEditTime: 2020-12-17 03:44:12
+ * @LastEditTime: 2020-12-17 22:33:17
  */
 package models
 
@@ -33,6 +33,30 @@ func (m *ContentDB) AddContent(detail string, tag []string, ownID string, isPubl
 	content.Public = isPublic
 	content.Tag = tag
 	err := m.DB.Insert(content)
+	return err
+}
+
+//UpdateContent 增加内容
+func (m *ContentDB) UpdateContent(contentID, detail string, tag []string, ownID string, isPublic bool) error {
+
+	c, err := m.DB.Find(bson.M{"_id": bson.ObjectIdHex(contentID), "ownId": bson.ObjectIdHex(ownID)}).Count()
+	if err != nil {
+		return err
+	}
+	if c == 0 {
+		err = errors.New(StatusUserContentNotMatching)
+		return err
+	}
+
+	var content Content
+	content.ID = bson.ObjectIdHex(contentID)
+	content.Detail = detail
+	content.OwnID = bson.ObjectIdHex(ownID)
+	content.PublishDate = time.Now().Unix() * 1000
+	content.LikeNum = 0
+	content.Public = isPublic
+	content.Tag = tag
+	err = m.DB.UpdateId(bson.ObjectIdHex(contentID), content)
 	return err
 }
 
