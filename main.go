@@ -33,6 +33,13 @@ func main() {
 	like.DBL = sesson.DB("project").C("like")
 	like.DBC = sesson.DB("project").C("content")
 	like.DBN = sesson.DB("project").C("notification")
+	var content models.ContentDB
+	content.DB = sesson.DB("project").C("content")
+	content.DBuser = sesson.DB("project").C("user")
+	var notification models.NotifiationDB
+	notification.DBN = sesson.DB("project").C("notification")
+	notification.DBU = sesson.DB("project").C("user")
+
 
 	app := iris.Default()
 	app.Use(myMiddleware)
@@ -49,6 +56,15 @@ func main() {
 	likes := mvc.New(app.Party("/like"))
 	likes.Register(sess.Start)
 	likes.Handle(&controllers.LikeController{Model: like})
+
+
+	contents := mvc.New(app.Party("/content"))
+	contents.Register(sess.Start)
+	contents.Handle(&controllers.ContentController{Model: content})
+
+	notifications := mvc.New(app.Party("/notification"))
+	notifications.Register(sess.Start)
+	notifications.Handle(&controllers.NotificationController{Model: notification})
 
 	// Listens and serves incoming http requests
 	// on http://localhost:8080.

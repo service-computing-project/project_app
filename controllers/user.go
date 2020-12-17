@@ -1,9 +1,9 @@
 package controllers
 
 import (
+	"github.com/globalsign/mgo/bson"
 	"github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/sessions"
-	"github.com/globalsign/mgo/bson"
 	"github.com/service-computing-project/project_app/models"
 )
 
@@ -104,7 +104,6 @@ func (c *UsersController) GetInfoBy(id string) (res models.UserInfoRes) {
 			return
 		}
 		id = c.Session.GetString("id")
-
 	}else if !bson.IsObjectIdHex(id) {
 		res.State = models.StatusBadReq
 		return
