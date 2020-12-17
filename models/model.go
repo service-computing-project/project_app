@@ -4,7 +4,7 @@
  * @Author: sunylin
  * @Date: 2020-12-14 23:13:17
  * @LastEditors: sunylin
- * @LastEditTime: 2020-12-17 22:33:57
+ * @LastEditTime: 2020-12-18 01:57:00
  */
 package models
 
@@ -142,8 +142,9 @@ type UserNotificationres struct {
 type NotificationDetail struct {
 	ID         bson.ObjectId `bson:"_id"`
 	CreateTime int64         `bson:"time"`
-	Content    string        `bson:"content"`  // 通知内容
-	SourceID   bson.ObjectId `bson:"sourceId"` // 源ID （点赞用户）
-	TargetID   bson.ObjectId `bson:"targetId"` // 目标ID （被点赞用户）
-	Type       string        `bson:"type"`     // 类型：暂时只有like
+	Content    string        `bson:"content"`   // 通知内容
+	SourceID   bson.ObjectId `bson:"sourceId"`  // 源ID （点赞用户）
+	TargetID   bson.ObjectId `bson:"targetId"`  // 目标ID （被点赞用户）
+	ContentID  bson.ObjectId `bson:"contentId"` //点赞文章ID
+	Type       string        `bson:"type"`      // 类型：暂时只有like
 }

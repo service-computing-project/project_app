@@ -4,7 +4,7 @@
  * @Author: sunylin
  * @Date: 2020-12-16 15:03:45
  * @LastEditors: sunylin
- * @LastEditTime: 2020-12-18 01:13:46
+ * @LastEditTime: 2020-12-18 01:58:45
  */
 package models
 
@@ -64,7 +64,7 @@ func (m *LikeDB) LikeByID(Contentid, Userid string) (err error) {
 	if err != nil {
 		return
 	}
-	c, err = m.DBN.Find(bson.M{"sourceId": bson.ObjectIdHex(Userid), "targetId": n.ContentOwner}).Count()
+	c, err = m.DBN.Find(bson.M{"sourceId": bson.ObjectIdHex(Userid), "contentId": bson.ObjectIdHex(Contentid)}).Count()
 	if c != 0 {
 		err = errors.New(StatusNotificationExist)
 		return
@@ -76,6 +76,7 @@ func (m *LikeDB) LikeByID(Contentid, Userid string) (err error) {
 		Content:    n.Content,
 		SourceID:   bson.ObjectIdHex(Userid),
 		TargetID:   n.ContentOwner,
+		ContentID:  bson.ObjectIdHex(Contentid),
 		Type:       "like",
 	})
 
