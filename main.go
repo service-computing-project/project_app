@@ -40,6 +40,20 @@ func main() {
 	users.Register(sess.Start)
 	users.Handle(&controllers.UsersController{Model: user})
 
+	// create Content model
+	var content models.ContentDB
+	content.DB = sesson.DB("project").C("content")
+	content.DBuser = sesson.DB("project").C("user")
+	contents := mvc.New(app.Party("/content"))
+	contents.Register(sess.Start)
+	contents.Handle(&controllers.ContentController{Model: content})
+	//create Notification model
+	var notification models.NotifiationDB
+	notification.DBN = sesson.DB("project").C("notification")
+	notification.DBU = sesson.DB("project").C("user")
+	notifications := mvc.New(app.Party("/notification"))
+	notifications.Register(sess.Start)
+	notifications.Handle(&controllers.NotificationController{Model: notification})
 	// Listens and serves incoming http requests
 	// on http://localhost:8080.
 	app.Listen("0.0.0.0:8080")
