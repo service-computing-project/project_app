@@ -4,7 +4,7 @@
  * @Author: sunylin
  * @Date: 2020-12-14 23:13:17
  * @LastEditors: sunylin
- * @LastEditTime: 2020-12-16 17:09:43
+ * @LastEditTime: 2020-12-16 17:34:25
  */
 package models
 
@@ -114,11 +114,16 @@ type Like struct {
 
 //notification
 
-//Notification 用户通知集合
-type Notification struct {
-	ID            bson.ObjectId        `bson:"_id"`
-	UserID        bson.ObjectId        `bson:"userId"`        // 用户ID 【索引】
-	Notifications []NotificationDetail `bson:"notifications"` // 通知集合
+//Notificationres 通知集合
+type Notificationres struct {
+	Notifiation NotificationDetail
+	SourceInfo  ContentUserInfo
+}
+
+//UserNotificationres 响应用户通知集合
+type UserNotificationres struct {
+	State         string
+	Notifications []Notificationres
 }
 
 //NotificationDetail 通知详情
