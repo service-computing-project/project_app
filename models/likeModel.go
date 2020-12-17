@@ -4,7 +4,7 @@
  * @Author: sunylin
  * @Date: 2020-12-16 15:03:45
  * @LastEditors: sunylin
- * @LastEditTime: 2020-12-16 17:03:49
+ * @LastEditTime: 2020-12-17 15:50:35
  */
 package models
 
@@ -111,19 +111,22 @@ func (m *LikeDB) CancelLikeByID(Contentid, Userid string) (err error) {
 
 //GetUserListByContentID 通过文章id获取点赞的用户列表
 func (m *LikeDB) GetUserListByContentID(Contentid string) (user []string, err error) {
-	var userID []bson.ObjectId
+	type TempUser struct {
+		UserID bson.ObjectId
+	}
+	var userid []TempUser
 	c, err := m.DBC.FindId(bson.ObjectIdHex(Contentid)).Count()
 	if c == 0 {
 		err = errors.New(StatusNoContent)
 		return
 	}
-	err = m.DBL.Find(bson.M{"contentId": bson.ObjectIdHex(Contentid)}).Select(bson.M{"contentId": 1}).All(&userID)
+	err = m.DBL.Find(bson.M{"contentId": bson.ObjectIdHex(Contentid)}).Select(bson.M{"contentId": 1}).All(&userid)
 	if err != nil {
 		return
 	}
-	for _, value := range userID {
+	for _, value := range userid {
 		var likeUser User
-		err = m.DBU.FindId(value).One(&likeUser)
+		err = m.DBU.FindId(value.UserID).One(&likeUser)
 		if err != nil {
 			return
 		}
