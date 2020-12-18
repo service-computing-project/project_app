@@ -3,6 +3,8 @@ language: go
 go:
   - 1.15
 
+sudo: required
+
 install:
   - echo "install"
  
