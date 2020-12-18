@@ -73,5 +73,7 @@ func main() {
 
 func myMiddleware(ctx iris.Context) {
 	ctx.Application().Logger().Infof("Runs before %s", ctx.Path())
+	ctx.Recorder().ResetHeaders()
+	ctx.Header("Access-Control-Allow-Origin","*")
 	ctx.Next()
 }
