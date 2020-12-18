@@ -77,7 +77,6 @@ func (m *LikeDB) LikeByID(Contentid, Userid string) (err error) {
 		SourceID:   bson.ObjectIdHex(Userid),
 		ContentID:  bson.ObjectIdHex(Contentid),
 		TargetID:   n.ContentOwner,
-		ContentID:  bson.ObjectIdHex(Contentid),
 		Type:       "like",
 	})
 

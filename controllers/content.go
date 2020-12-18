@@ -144,3 +144,44 @@ func (c *ContentController) PostText() (res models.CommonRes) {
 	}
 	return
 }
+
+//UpdateReq POST /api/content/text 增加文本内容
+type TextUpdateReq struct {
+	ID       string   `json:"contentID"`
+	Detail   string   `json:"detail"`
+	Tags     []string `json:"tags"`
+	IsPublic bool     `json:"isPublic"`
+}
+
+//PostUpdate  POST /api/content/update 增加文本内容
+func (c *ContentController) PostUpdate() (res models.CommonRes) {
+	id := c.Session.Get("id")
+	if id == nil {
+		res.State = models.StatusNotLogin
+		return
+	}
+	//token check
+	token, err := request.ParseFromRequest(c.Ctx.Request(), request.AuthorizationHeaderExtractor,
+		func(token *jwt.Token) (i interface{}, e error) {
+			return []byte("My Secret"), nil
+		})
+
+	if err != nil || !token.Valid {
+		res.Data = err.Error()
+		res.State = models.StatusBadReq
+		return
+	}
+	req := TextUpdateReq{}
+	err = c.Ctx.ReadJSON(&req)
+	if err != nil || req.Detail == "" {
+		res.State = models.StatusBadReq
+		return
+	}
+	err1 := c.Model.UpdateContent(req.ID, req.Detail, req.Tags, id.(string), req.IsPublic)
+	if err1 != nil {
+		res.State = err1.Error()
+	} else {
+		res.State = models.StatusSuccess
+	}
+	return
+}
