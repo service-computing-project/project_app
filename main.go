@@ -4,7 +4,7 @@
  * @Author: sunylin
  * @Date: 2020-12-15 22:38:08
  * @LastEditors: sunylin
- * @LastEditTime: 2020-12-16 22:47:35
+ * @LastEditTime: 2020-12-18 17:48:41
  */
 package main
 
@@ -67,19 +67,19 @@ func main() {
 	sess := sessions.New(sessions.Config{
 		Cookie: sessionID,
 	})
-	users := mvc.New(app.Party("/user"))
+	users := mvc.New(app.Party("/api/user"))
 	users.Register(sess.Start)
 	users.Handle(&controllers.UsersController{Model: user})
 
-	likes := mvc.New(app.Party("/like"))
+	likes := mvc.New(app.Party("/api/like"))
 	likes.Register(sess.Start)
 	likes.Handle(&controllers.LikeController{Model: like})
 
-	contents := mvc.New(app.Party("/content"))
+	contents := mvc.New(app.Party("/api/content"))
 	contents.Register(sess.Start)
 	contents.Handle(&controllers.ContentController{Model: content})
 
-	notifications := mvc.New(app.Party("/notification", ValidateJwtMiddleware))
+	notifications := mvc.New(app.Party("/api/notification", ValidateJwtMiddleware))
 	notifications.Register(sess.Start)
 	notifications.Handle(&controllers.NotificationController{Model: notification})
 
@@ -91,6 +91,6 @@ func main() {
 func myMiddleware(ctx iris.Context) {
 	ctx.Application().Logger().Infof("Runs before %s", ctx.Path())
 	ctx.Recorder().ResetHeaders()
-	ctx.Header("Access-Control-Allow-Origin","*")
+	ctx.Header("Access-Control-Allow-Origin", "*")
 	ctx.Next()
 }
