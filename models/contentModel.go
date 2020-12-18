@@ -4,7 +4,7 @@
  * @Author: sunylin
  * @Date: 2020-12-15 17:25:48
  * @LastEditors: sunylin
- * @LastEditTime: 2020-12-17 22:33:17
+ * @LastEditTime: 2020-12-18 23:41:24
  */
 package models
 
@@ -57,15 +57,30 @@ func (m *ContentDB) UpdateContent(contentID, detail string, tag []string, ownID 
 	content.Public = isPublic
 	content.Tag = tag
 	err = m.DB.UpdateId(bson.ObjectIdHex(contentID), content)
+	if err != nil {
+		return err
+	}
+
+	err = m.DBuser.UpdateId(bson.ObjectIdHex(ownID), bson.M{"$inc": bson.M{"contentCount": 1}})
 	return err
 }
 
 // RemoveContent 删除内容
 func (m *ContentDB) RemoveContent(id string) (err error) {
+
 	if !bson.IsObjectIdHex(id) {
 		return errors.New(StatusNoID)
 	}
+	var content Content
+	err = m.DB.FindId(bson.ObjectIdHex(id)).One(&content)
+	if err != nil {
+		return err
+	}
 	err = m.DB.RemoveId(bson.ObjectIdHex(id))
+	if err != nil {
+		return err
+	}
+	err = m.DBuser.UpdateId(content.OwnID, bson.M{"$inc": bson.M{"contentCount": -1}})
 	return
 }
 

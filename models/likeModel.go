@@ -4,7 +4,7 @@
  * @Author: sunylin
  * @Date: 2020-12-16 15:03:45
  * @LastEditors: sunylin
- * @LastEditTime: 2020-12-18 17:46:50
+ * @LastEditTime: 2020-12-18 23:36:50
  */
 package models
 
@@ -64,6 +64,10 @@ func (m *LikeDB) LikeByID(Contentid, Userid string) (err error) {
 	if err != nil {
 		return
 	}
+	err = m.DBU.UpdateId(n.ContentOwner, bson.M{"$inc": bson.M{"likeCount": 1}})
+	if err != nil {
+		return
+	}
 	c, err = m.DBN.Find(bson.M{"sourceId": bson.ObjectIdHex(Userid), "contentId": bson.ObjectIdHex(Contentid)}).Count()
 	if c != 0 {
 		err = errors.New(StatusNotificationExist)
@@ -105,7 +109,18 @@ func (m *LikeDB) CancelLikeByID(Contentid, Userid string) (err error) {
 	if err != nil {
 		return
 	}
-
+	type notificationTarget struct {
+		ContentOwner bson.ObjectId `bson:"ownId"`
+	}
+	var n notificationTarget
+	err = m.DBC.FindId(bson.ObjectIdHex(Contentid)).Select(bson.M{"ownId": 1}).One(&n)
+	if err != nil {
+		return
+	}
+	err = m.DBU.UpdateId(n.ContentOwner, bson.M{"$inc": bson.M{"likeCount": -1}})
+	if err != nil {
+		return
+	}
 	err = m.DBC.UpdateId(bson.ObjectIdHex(Contentid), bson.M{"$inc": bson.M{"likeNum": -1}})
 	return
 }
