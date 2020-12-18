@@ -2,3 +2,9 @@ language: go
 
 go:
   - 1.15
+
+install:
+  - echo "install"
+ 
+script:
+  - echo "script"
