@@ -64,7 +64,7 @@ func (m *LikeDB) LikeByID(Contentid, Userid string) (err error) {
 	if err != nil {
 		return
 	}
-	c, err = m.DBN.Find(bson.M{"sourceId": bson.ObjectIdHex(Userid), "targetId": n.ContentOwner}).Count()
+	c, err = m.DBN.Find(bson.M{"sourceId": bson.ObjectIdHex(Userid), "contentId": bson.ObjectIdHex(Contentid)}).Count()
 	if c != 0 {
 		err = errors.New(StatusNotificationExist)
 		return
@@ -75,6 +75,7 @@ func (m *LikeDB) LikeByID(Contentid, Userid string) (err error) {
 		CreateTime: time.Now().Unix() * 1000,
 		Content:    n.Content,
 		SourceID:   bson.ObjectIdHex(Userid),
+		ContentID:  bson.ObjectIdHex(Contentid),
 		TargetID:   n.ContentOwner,
 		Type:       "like",
 	})

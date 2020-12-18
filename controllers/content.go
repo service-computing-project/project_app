@@ -1,6 +1,8 @@
 package controllers
 
 import (
+	"github.com/dgrijalva/jwt-go"
+	"github.com/dgrijalva/jwt-go/request"
 	"github.com/service-computing-project/project_app/models"
 
 	"github.com/kataras/iris/v12"
@@ -42,7 +44,17 @@ func (c *ContentController) DeleteBy(contentID string) (res models.CommonRes) {
 		res.State = models.StatusBadReq
 		return
 	}
-	err := c.Model.RemoveContent(contentID)
+	token, err := request.ParseFromRequest(c.Ctx.Request(), request.AuthorizationHeaderExtractor,
+		func(token *jwt.Token) (i interface{}, e error) {
+			return []byte("My Secret"), nil
+		})
+
+	if err != nil || !token.Valid {
+		res.Data = err.Error()
+		res.State = models.StatusBadReq
+		return
+	}
+	err = c.Model.RemoveContent(contentID)
 	if err != nil {
 		res.State = err.Error()
 	} else {
@@ -107,8 +119,19 @@ func (c *ContentController) PostText() (res models.CommonRes) {
 		res.State = models.StatusNotLogin
 		return
 	}
+	//token check
+	token, err := request.ParseFromRequest(c.Ctx.Request(), request.AuthorizationHeaderExtractor,
+		func(token *jwt.Token) (i interface{}, e error) {
+			return []byte("My Secret"), nil
+		})
+
+	if err != nil || !token.Valid {
+		res.Data = err.Error()
+		res.State = models.StatusBadReq
+		return
+	}
 	req := TextReq{}
-	err := c.Ctx.ReadJSON(&req)
+	err = c.Ctx.ReadJSON(&req)
 	if err != nil || req.Detail == "" {
 		res.State = models.StatusBadReq
 		return

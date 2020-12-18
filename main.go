@@ -11,6 +11,8 @@ package main
 import (
 	"fmt"
 
+	"github.com/dgrijalva/jwt-go"
+	"github.com/dgrijalva/jwt-go/request"
 	"github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/mvc"
 	"github.com/kataras/iris/v12/sessions"
@@ -18,6 +20,23 @@ import (
 	"github.com/service-computing-project/project_app/models"
 	"github.com/service-computing-project/project_app/service"
 )
+
+// JWT验证中间件
+func ValidateJwtMiddleware(ctx iris.Context) {
+	token, err := request.ParseFromRequest(ctx.Request(), request.AuthorizationHeaderExtractor,
+		func(token *jwt.Token) (i interface{}, e error) {
+			return []byte("My Secret"), nil
+		})
+
+	if err != nil || !token.Valid {
+		var errres models.CommonRes
+		errres.State = models.StatusBadReq
+		errres.Data = err.Error()
+		ctx.JSON(errres)
+	} else {
+		ctx.Next()
+	}
+}
 
 func main() {
 	//sessions,err :=service.DBservice()
@@ -40,7 +59,6 @@ func main() {
 	notification.DBN = sesson.DB("project").C("notification")
 	notification.DBU = sesson.DB("project").C("user")
 
-
 	app := iris.Default()
 	app.Use(myMiddleware)
 
@@ -57,12 +75,11 @@ func main() {
 	likes.Register(sess.Start)
 	likes.Handle(&controllers.LikeController{Model: like})
 
-
 	contents := mvc.New(app.Party("/content"))
 	contents.Register(sess.Start)
 	contents.Handle(&controllers.ContentController{Model: content})
 
-	notifications := mvc.New(app.Party("/notification"))
+	notifications := mvc.New(app.Party("/notification", ValidateJwtMiddleware))
 	notifications.Register(sess.Start)
 	notifications.Handle(&controllers.NotificationController{Model: notification})
 
