@@ -5,8 +5,15 @@ go:
 
 sudo: required
 
+os:
+  - linux
+  - windows
+
 install:
   - echo "install"
+  - go get -insecure github.com/service-computing-project/project_app
+
  
 script:
   - echo "script"
+  - go test ./...
