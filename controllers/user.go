@@ -41,6 +41,11 @@ type LoginReq struct {
 	Password string `json:"password"`
 }
 
+//OptionsLogin Options /user/login 用户登陆
+func (c *UsersController) OptionsLogin() {
+	return
+}
+
 //PostLogin POST /user/login 用户登陆
 func (c *UsersController) PostLogin() (res models.CommonRes) {
 	req := LoginReq{}
