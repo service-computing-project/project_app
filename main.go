@@ -4,16 +4,16 @@
  * @Author: sunylin
  * @Date: 2020-12-15 22:38:08
  * @LastEditors: sunylin
- * @LastEditTime: 2020-12-20 23:42:51
+ * @LastEditTime: 2020-12-21 02:38:58
  */
 package main
 
 import (
 	"fmt"
-	"net/http"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/dgrijalva/jwt-go/request"
+	"github.com/iris-contrib/middleware/cors"
 	"github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/mvc"
 	"github.com/kataras/iris/v12/sessions"
@@ -90,19 +90,22 @@ func main() {
 		Cookie: sessionID,
 		//DisableSubdomainPersistence: true,
 	})
-	users := mvc.New(app.Party("/api/user"))
+	crs := cors.New(cors.Options{
+		AllowedOrigins: []string{"*"}, //允许通过的主机名称
+	})
+	users := mvc.New(app.Party("/api/user", crs).AllowMethods())
 	users.Register(sess.Start)
 	users.Handle(&controllers.UsersController{Model: user})
 
-	likes := mvc.New(app.Party("/api/like"))
+	likes := mvc.New(app.Party("/api/like", crs).AllowMethods())
 	likes.Register(sess.Start)
 	likes.Handle(&controllers.LikeController{Model: like})
 
-	contents := mvc.New(app.Party("/api/content"))
+	contents := mvc.New(app.Party("/api/content", crs).AllowMethods())
 	contents.Register(sess.Start)
 	contents.Handle(&controllers.ContentController{Model: content})
 
-	notifications := mvc.New(app.Party("/api/notification"))
+	notifications := mvc.New(app.Party("/api/notification", crs).AllowMethods())
 	notifications.Register(sess.Start)
 	notifications.Handle(&controllers.NotificationController{Model: notification})
 
@@ -114,17 +117,17 @@ func main() {
 func myMiddleware(ctx iris.Context) {
 	ctx.Application().Logger().Infof("Runs before %s", ctx.Path())
 	fmt.Println("test for middle")
-	ctx.Recorder().ResetHeaders()
+	//ctx.Recorder().ResetHeaders()
 	//ctx.Header("Access-Control-Allow-Origin", "*")
 	//ctx.Header("Access-Control-Allow-Headers", "content-type")
-	ctx.Header("Access-Control-Allow-Origin", "*")
-	ctx.Header("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,PATCH,OPTIONS")
-	ctx.Header("Access-Control-Allow-Headers", "Content-Type, Accept, Authorization")
-	if ctx.Request().Method == "OPTIONS" {
-		fmt.Println("test for core")
-		ctx.StatusCode(http.StatusOK)
-		return
-	}
+	//ctx.Header("Access-Control-Allow-Origin", "*")
+	//ctx.Header("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,PATCH,OPTIONS")
+	//.Header("Access-Control-Allow-Headers", "Content-Type, Accept, Authorization")
+	//if ctx.Request().Method == "OPTIONS" {
+	//	fmt.Println("test for core")
+	//	ctx.StatusCode(http.StatusOK)
+	//	return
+	//}
 	ctx.Next()
 	//ctx.Next()
 }
