@@ -63,10 +63,10 @@ func (c *ContentController) DeleteBy(contentID string) (res models.CommonRes) {
 	return
 }
 
-type PageParams struct {
-	Page   int   `url:"page"`
-	PerPage int  `url:"per_page"`
-}
+// type PageParams struct {
+// 	Page    int `url:"page"`
+// 	PerPage int `url:"per_page"`
+// }
 
 //GetPublic GET /api/content/public  获取公共内容
 func (c *ContentController) GetPublic() (res models.ContentPublicList) {
@@ -124,19 +124,19 @@ func (c *ContentController) PostText() (res models.CommonRes) {
 		res.State = models.StatusNotLogin
 		return
 	}
-	//token check
-	token, err := request.ParseFromRequest(c.Ctx.Request(), request.AuthorizationHeaderExtractor,
-		func(token *jwt.Token) (i interface{}, e error) {
-			return []byte("My Secret"), nil
-		})
+	// //token check
+	// token, err := request.ParseFromRequest(c.Ctx.Request(), request.AuthorizationHeaderExtractor,
+	// 	func(token *jwt.Token) (i interface{}, e error) {
+	// 		return []byte("My Secret"), nil
+	// 	})
 
-	if err != nil || !token.Valid {
-		res.Data = err.Error()
-		res.State = models.StatusBadReq
-		return
-	}
+	// if err != nil || !token.Valid {
+	// 	res.Data = err.Error()
+	// 	res.State = models.StatusBadReq
+	// 	return
+	// }
 	req := TextReq{}
-	err = c.Ctx.ReadJSON(&req)
+	err := c.Ctx.ReadJSON(&req)
 	if err != nil || req.Detail == "" {
 		res.State = models.StatusBadReq
 		return
@@ -165,19 +165,19 @@ func (c *ContentController) PostUpdate() (res models.CommonRes) {
 		res.State = models.StatusNotLogin
 		return
 	}
-	//token check
-	token, err := request.ParseFromRequest(c.Ctx.Request(), request.AuthorizationHeaderExtractor,
-		func(token *jwt.Token) (i interface{}, e error) {
-			return []byte("My Secret"), nil
-		})
+	// //token check
+	// token, err := request.ParseFromRequest(c.Ctx.Request(), request.AuthorizationHeaderExtractor,
+	// 	func(token *jwt.Token) (i interface{}, e error) {
+	// 		return []byte("My Secret"), nil
+	// 	})
 
-	if err != nil || !token.Valid {
-		res.Data = err.Error()
-		res.State = models.StatusBadReq
-		return
-	}
+	// if err != nil || !token.Valid {
+	// 	res.Data = err.Error()
+	// 	res.State = models.StatusBadReq
+	// 	return
+	// }
 	req := TextUpdateReq{}
-	err = c.Ctx.ReadJSON(&req)
+	err := c.Ctx.ReadJSON(&req)
 	if err != nil || req.Detail == "" {
 		res.State = models.StatusBadReq
 		return

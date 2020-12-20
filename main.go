@@ -100,7 +100,7 @@ func main() {
 	contents.Register(sess.Start)
 	contents.Handle(&controllers.ContentController{Model: content})
 
-	notifications := mvc.New(app.Party("/api/notification", ValidateJwtMiddleware))
+	notifications := mvc.New(app.Party("/api/notification"))
 	notifications.Register(sess.Start)
 	notifications.Handle(&controllers.NotificationController{Model: notification})
 
