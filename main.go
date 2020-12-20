@@ -4,7 +4,7 @@
  * @Author: sunylin
  * @Date: 2020-12-15 22:38:08
  * @LastEditors: sunylin
- * @LastEditTime: 2020-12-21 01:54:20
+ * @LastEditTime: 2020-12-21 02:00:08
  */
 package main
 
@@ -61,7 +61,7 @@ func main() {
 	notification.DBN = sesson.DB("project").C("notification")
 	notification.DBU = sesson.DB("project").C("user")
 
-	app := iris.Default()
+	app := iris.New()
 	app.Use(myMiddleware)
 	//app.Use(Cors)
 	app.Handle("GET", "/api", func(ctx iris.Context) {
