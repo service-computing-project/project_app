@@ -148,3 +148,23 @@ type NotificationDetail struct {
 	ContentID  bson.ObjectId `bson:"contentId"` //点赞文章ID
 	Type       string        `bson:"type"`      // 类型：暂时只有like
 }
+
+//RootRes 简单 API 服务列表
+type RootRes struct {
+	UserGetInfo string `json:"user_information_url"` 
+	UserPostLogin string `json:"user_login_url"` 
+	UserPostRegister string `json:"user_register_url"` 
+	UserPostLogout string `json:"user_logout_url"` 
+	UserPostName string `json:"user_rename_url"` 
+
+	ContentDeleteBy string `json:"content_url"` 
+	ContentGetDetailBy string `json:"content_detail_url"` 
+	ContentGetPublic string `json:"content_public_url"` 
+	ContentGetTexts string `json:"content_text_url"` 
+	ContentPostUpdate string `json:"content_upadate_url"` 
+
+	Like string `json:"like_url"` 
+
+	Notification string `json:"notification_url"` 
+	NotificationGetAll string `json:"notification_all_url"` 
+}
