@@ -40,6 +40,11 @@ func (c *ContentController) Options() {
 	return
 }
 
+//OptionsBy options
+func (c *ContentController) OptionsBy(contentID string) {
+	return
+}
+
 //DeleteBy DELETE /api/content/{contentID:string}  删除指定内容
 func (c *ContentController) DeleteBy(contentID string) (res models.CommonRes) {
 	if c.Session.Get("id") == nil {
