@@ -4,7 +4,7 @@
  * @Author: sunylin
  * @Date: 2020-12-15 22:38:08
  * @LastEditors: sunylin
- * @LastEditTime: 2020-12-20 23:15:12
+ * @LastEditTime: 2020-12-20 23:22:05
  */
 package main
 
@@ -60,8 +60,8 @@ func main() {
 	notification.DBU = sesson.DB("project").C("user")
 
 	app := iris.Default()
-	app.Use(myMiddleware)
-
+	//app.Use(myMiddleware)
+	app.Use(Cors)
 	app.Handle("GET", "/api", func(ctx iris.Context) {
 		ctx.JSON(models.RootRes{
 			"http://47.103.210.109:8080/api/user/info/{userID}",
@@ -86,8 +86,8 @@ func main() {
 	sessionID := "mySession"
 	//session的创建
 	sess := sessions.New(sessions.Config{
-		Cookie:                      sessionID,
-		DisableSubdomainPersistence: true,
+		Cookie: sessionID,
+		//DisableSubdomainPersistence: true,
 	})
 	users := mvc.New(app.Party("/api/user"))
 	users.Register(sess.Start)
@@ -109,11 +109,20 @@ func main() {
 	// on http://localhost:8080.
 	app.Listen("0.0.0.0:8080")
 }
-
+func Cors(ctx iris.Context) {
+	ctx.Header("Access-Control-Allow-Origin", "*")
+	if ctx.Request().Method == "OPTIONS" {
+		ctx.Header("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,PATCH,OPTIONS")
+		ctx.Header("Access-Control-Allow-Headers", "Content-Type, Accept, Authorization")
+		ctx.StatusCode(204)
+		return
+	}
+	ctx.Next()
+}
 func myMiddleware(ctx iris.Context) {
 	ctx.Application().Logger().Infof("Runs before %s", ctx.Path())
 	ctx.Recorder().ResetHeaders()
-	ctx.Header("Access-Control-Allow-Origin", "*")
-	ctx.Header("Access-Control-Allow-Headers", "content-type")
+	//ctx.Header("Access-Control-Allow-Origin", "*")
+	//ctx.Header("Access-Control-Allow-Headers", "content-type")
 	ctx.Next()
 }
