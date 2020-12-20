@@ -4,7 +4,7 @@
  * @Author: sunylin
  * @Date: 2020-12-15 17:25:48
  * @LastEditors: sunylin
- * @LastEditTime: 2020-12-17 03:44:12
+ * @LastEditTime: 2020-12-21 03:34:08
  */
 package models
 
@@ -69,7 +69,7 @@ func (m *ContentDB) GetDetailByID(id string) (res ContentDetailres, err error) {
 }
 
 //GetPublic 获取公共内容
-func (m *ContentDB) GetPublic() (res ContentPublicList, err error) {
+func (m *ContentDB) GetPublic(page, eachpage int) (res ContentPublicList, err error) {
 	type AllContentID struct {
 		Allid bson.ObjectId `bson:"_id"`
 	}
@@ -78,7 +78,7 @@ func (m *ContentDB) GetPublic() (res ContentPublicList, err error) {
 	if err != nil {
 		return
 	}
-	for _, value := range all {
+	for _, value := range all[(page-1)*eachpage : page*eachpage-1] {
 		var data ContentDetailres
 		data, err = m.GetDetailByID(value.Allid.Hex())
 		if err != nil {
@@ -90,10 +90,10 @@ func (m *ContentDB) GetPublic() (res ContentPublicList, err error) {
 }
 
 //GetContentSelf 根据自己的用户id获取文章列表
-func (m *ContentDB) GetContentSelf(id string) (res ContentListByUser, err error) {
+func (m *ContentDB) GetContentSelf(id string, page, eachpage int) (res ContentListByUser, err error) {
 	var c []Content
 	err = m.DB.Find(bson.M{"ownId": bson.ObjectIdHex(id)}).All(&c)
-	for _, value := range c {
+	for _, value := range c[(page-1)*eachpage : page*eachpage-1] {
 		var resc Contentres
 		resc.Detail = value.Detail
 		resc.ID = value.ID.Hex()
@@ -109,10 +109,10 @@ func (m *ContentDB) GetContentSelf(id string) (res ContentListByUser, err error)
 }
 
 //GetContentByUser 获取他人的文章列表
-func (m *ContentDB) GetContentByUser(id string) (res ContentListByUser, err error) {
+func (m *ContentDB) GetContentByUser(id string, page, eachpage int) (res ContentListByUser, err error) {
 	var c []Content
 	err = m.DB.Find(bson.M{"ownId": bson.ObjectIdHex(id), "public": true}).All(&c)
-	for _, value := range c {
+	for _, value := range c[(page-1)*eachpage : page*eachpage-1] {
 		var resc Contentres
 		resc.Detail = value.Detail
 		resc.ID = value.ID.Hex()
