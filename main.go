@@ -4,7 +4,7 @@
  * @Author: sunylin
  * @Date: 2020-12-15 22:38:08
  * @LastEditors: sunylin
- * @LastEditTime: 2020-12-21 02:00:08
+ * @LastEditTime: 2020-12-21 02:09:41
  */
 package main
 
@@ -61,7 +61,7 @@ func main() {
 	notification.DBN = sesson.DB("project").C("notification")
 	notification.DBU = sesson.DB("project").C("user")
 
-	app := iris.New()
+	app := iris.Default()
 	app.Use(myMiddleware)
 	//app.Use(Cors)
 	app.Handle("GET", "/api", func(ctx iris.Context) {
@@ -122,7 +122,7 @@ func myMiddleware(ctx iris.Context) {
 	ctx.Recorder().ResetHeaders()
 	//ctx.Header("Access-Control-Allow-Origin", "*")
 	//ctx.Header("Access-Control-Allow-Headers", "content-type")
-	ctx.Header("Access-Control-Allow-Origin", "*")
+	//ctx.Header("Access-Control-Allow-Origin", "*")
 	ctx.Header("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,PATCH,OPTIONS")
 	ctx.Header("Access-Control-Allow-Headers", "Content-Type, Accept, Authorization")
 	if ctx.Request().Method == "OPTIONS" {
