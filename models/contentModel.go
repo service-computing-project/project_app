@@ -4,11 +4,7 @@
  * @Author: sunylin
  * @Date: 2020-12-15 17:25:48
  * @LastEditors: sunylin
-<<<<<<< HEAD
- * @LastEditTime: 2020-12-21 03:34:08
-=======
- * @LastEditTime: 2020-12-20 02:48:30
->>>>>>> 5a19cd16dd01f96fc100118a09aec4d12df2bf33
+ * @LastEditTime: 2020-12-21 03:35:59
  */
 package models
 
@@ -139,13 +135,8 @@ func (m *ContentDB) GetPublic(page, eachpage int) (res ContentPublicList, err er
 //GetContentSelf 根据自己的用户id获取文章列表
 func (m *ContentDB) GetContentSelf(id string, page, eachpage int) (res ContentListByUser, err error) {
 	var c []Content
-<<<<<<< HEAD
 	err = m.DB.Find(bson.M{"ownId": bson.ObjectIdHex(id)}).All(&c)
 	for _, value := range c[(page-1)*eachpage : page*eachpage-1] {
-=======
-	err = m.DB.Find(bson.M{"ownId": bson.ObjectIdHex(id)}).Sort("-publishDate").All(&c)
-	for _, value := range c {
->>>>>>> 5a19cd16dd01f96fc100118a09aec4d12df2bf33
 		var resc Contentres
 		resc.Detail = value.Detail
 		resc.ID = value.ID.Hex()
@@ -163,13 +154,8 @@ func (m *ContentDB) GetContentSelf(id string, page, eachpage int) (res ContentLi
 //GetContentByUser 获取他人的文章列表
 func (m *ContentDB) GetContentByUser(id string, page, eachpage int) (res ContentListByUser, err error) {
 	var c []Content
-<<<<<<< HEAD
 	err = m.DB.Find(bson.M{"ownId": bson.ObjectIdHex(id), "public": true}).All(&c)
 	for _, value := range c[(page-1)*eachpage : page*eachpage-1] {
-=======
-	err = m.DB.Find(bson.M{"ownId": bson.ObjectIdHex(id), "public": true}).Sort("-publishDate").All(&c)
-	for _, value := range c {
->>>>>>> 5a19cd16dd01f96fc100118a09aec4d12df2bf33
 		var resc Contentres
 		resc.Detail = value.Detail
 		resc.ID = value.ID.Hex()
