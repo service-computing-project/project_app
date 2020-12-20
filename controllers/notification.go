@@ -13,6 +13,11 @@ type NotificationController struct {
 	Session *sessions.Session
 }
 
+type PageParams struct {
+	Page   int   `url:"page"`
+	PerPage int  `url:"per_page"`
+}
+
 //GetAll GET /api/notification/all  获取用户所有通知
 func (c *NotificationController) GetAll() (res models.UserNotificationres) {
 	if c.Session.Get("id") == nil {

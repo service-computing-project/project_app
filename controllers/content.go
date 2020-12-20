@@ -63,6 +63,11 @@ func (c *ContentController) DeleteBy(contentID string) (res models.CommonRes) {
 	return
 }
 
+type PageParams struct {
+	Page   int   `url:"page"`
+	PerPage int  `url:"per_page"`
+}
+
 //GetPublic GET /api/content/public  获取公共内容
 func (c *ContentController) GetPublic() (res models.ContentPublicList) {
 	if c.Session.Get("id") == nil {
