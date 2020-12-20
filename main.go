@@ -4,7 +4,7 @@
  * @Author: sunylin
  * @Date: 2020-12-15 22:38:08
  * @LastEditors: sunylin
- * @LastEditTime: 2020-12-21 01:12:08
+ * @LastEditTime: 2020-12-21 01:54:20
  */
 package main
 
@@ -61,7 +61,7 @@ func main() {
 	notification.DBN = sesson.DB("project").C("notification")
 	notification.DBU = sesson.DB("project").C("user")
 
-	app := iris.New()
+	app := iris.Default()
 	app.Use(myMiddleware)
 	//app.Use(Cors)
 	app.Handle("GET", "/api", func(ctx iris.Context) {
@@ -95,19 +95,19 @@ func main() {
 		AllowedOrigins:   []string{"*"}, //允许通过的主机名称
 		AllowCredentials: true,
 	})
-	users := mvc.New(app.Party("/api/user", crs).AllowMethods(iris.MethodOptions))
+	users := mvc.New(app.Party("/api/user", crs).AllowMethods())
 	users.Register(sess.Start)
 	users.Handle(&controllers.UsersController{Model: user})
 
-	likes := mvc.New(app.Party("/api/like", crs).AllowMethods(iris.MethodOptions))
+	likes := mvc.New(app.Party("/api/like", crs).AllowMethods())
 	likes.Register(sess.Start)
 	likes.Handle(&controllers.LikeController{Model: like})
 
-	contents := mvc.New(app.Party("/api/content", crs).AllowMethods(iris.MethodOptions))
+	contents := mvc.New(app.Party("/api/content", crs).AllowMethods())
 	contents.Register(sess.Start)
 	contents.Handle(&controllers.ContentController{Model: content})
 
-	notifications := mvc.New(app.Party("/api/notification", crs).AllowMethods(iris.MethodOptions))
+	notifications := mvc.New(app.Party("/api/notification", crs).AllowMethods())
 	notifications.Register(sess.Start)
 	notifications.Handle(&controllers.NotificationController{Model: notification})
 
