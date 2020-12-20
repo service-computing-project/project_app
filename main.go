@@ -4,7 +4,7 @@
  * @Author: sunylin
  * @Date: 2020-12-15 22:38:08
  * @LastEditors: sunylin
- * @LastEditTime: 2020-12-20 22:56:42
+ * @LastEditTime: 2020-12-20 23:06:32
  */
 package main
 
@@ -86,7 +86,8 @@ func main() {
 	sessionID := "mySession"
 	//session的创建
 	sess := sessions.New(sessions.Config{
-		Cookie: sessionID,
+		Cookie:                      sessionID,
+		DisableSubdomainPersistence: false,
 	})
 	users := mvc.New(app.Party("/api/user"))
 	users.Register(sess.Start)
