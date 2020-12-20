@@ -1,9 +1,9 @@
 package controllers
 
 import (
+	"github.com/globalsign/mgo/bson"
 	"github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/sessions"
-
 	"github.com/service-computing-project/project_app/models"
 )
 
@@ -20,7 +20,12 @@ type RegisterReq struct {
 	Password string `json:"password"`
 }
 
-//PostLogin POST /user/register 用户注册
+//OptionsRegister OPTIONS /user/register 用户注册
+func (c *UsersController) OptionsRegister() {
+	return
+}
+
+//PostRegister POST /user/register 用户注册
 func (c *UsersController) PostRegister() (res models.CommonRes) {
 	req := RegisterReq{}
 	if err := c.Ctx.ReadJSON(&req); err != nil {
@@ -41,6 +46,11 @@ type LoginReq struct {
 	Password string `json:"password"`
 }
 
+//OptionsLogin Options /user/login 用户登陆
+func (c *UsersController) OptionsLogin() {
+	return
+}
+
 //PostLogin POST /user/login 用户登陆
 func (c *UsersController) PostLogin() (res models.CommonRes) {
 	req := LoginReq{}
@@ -53,6 +63,15 @@ func (c *UsersController) PostLogin() (res models.CommonRes) {
 	if err != nil {
 		res.State = err.Error()
 	} else {
+		// token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		// 	"name":     req.Name,
+		// 	"password": req.Password,
+		// 	"exp":      time.Now().Add(time.Hour * 1).Unix(),
+		// })
+
+		// // 这里的密钥和前面的必须一样
+		// tokenString, _ := token.SignedString([]byte("My Secret"))
+		// res.Data = tokenString
 		c.Session.Set("id", userID)
 		res.State = models.StatusSuccess
 	}
@@ -61,6 +80,10 @@ func (c *UsersController) PostLogin() (res models.CommonRes) {
 
 //PostLogout POST /user/logout 退出登陆
 func (c *UsersController) PostLogout() (res models.CommonRes) {
+	if c.Session.Get("id") == nil {
+		res.State = models.StatusNotLogin
+		return
+	}
 	c.Session.Delete("id")
 	res.State = models.StatusSuccess
 	return
@@ -71,12 +94,27 @@ type NameReq struct {
 	Name string `json:"name"`
 }
 
-//PostName POST /user/name 更新用户名
+//OptionsName OPTIONS /user/name
+func (c *UsersController) OptionsName() {
+	return
+}
+
+//PostName POST /user/name 更新用户名 (Token required)
 func (c *UsersController) PostName() (res models.CommonRes) {
 	if c.Session.Get("id") == nil {
 		res.State = models.StatusNotLogin
 		return
 	}
+	// token, err := request.ParseFromRequest(c.Ctx.Request(), request.AuthorizationHeaderExtractor,
+	// 	func(token *jwt.Token) (i interface{}, e error) {
+	// 		return []byte("My Secret"), nil
+	// 	})
+
+	// if err != nil || !token.Valid {
+	// 	res.Data = err.Error()
+	// 	res.State = models.StatusBadReq
+	// 	return
+	// }
 	req := NameReq{}
 	err := c.Ctx.ReadJSON(&req)
 	if err != nil || req.Name == "" {
@@ -100,7 +138,9 @@ func (c *UsersController) GetInfoBy(id string) (res models.UserInfoRes) {
 			return
 		}
 		id = c.Session.GetString("id")
-
+	} else if !bson.IsObjectIdHex(id) {
+		res.State = models.StatusBadReq
+		return
 	}
 	userinfores, err := c.Model.GetUserInfo(id)
 	res = userinfores
