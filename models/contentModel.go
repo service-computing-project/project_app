@@ -4,7 +4,7 @@
  * @Author: sunylin
  * @Date: 2020-12-15 17:25:48
  * @LastEditors: sunylin
- * @LastEditTime: 2020-12-17 03:44:12
+ * @LastEditTime: 2020-12-20 02:48:30
  */
 package models
 
@@ -36,12 +36,51 @@ func (m *ContentDB) AddContent(detail string, tag []string, ownID string, isPubl
 	return err
 }
 
+//UpdateContent 增加内容
+func (m *ContentDB) UpdateContent(contentID, detail string, tag []string, ownID string, isPublic bool) error {
+
+	c, err := m.DB.Find(bson.M{"_id": bson.ObjectIdHex(contentID), "ownId": bson.ObjectIdHex(ownID)}).Count()
+	if err != nil {
+		return err
+	}
+	if c == 0 {
+		err = errors.New(StatusUserContentNotMatching)
+		return err
+	}
+
+	var content Content
+	content.ID = bson.ObjectIdHex(contentID)
+	content.Detail = detail
+	content.OwnID = bson.ObjectIdHex(ownID)
+	content.PublishDate = time.Now().Unix() * 1000
+	content.LikeNum = 0
+	content.Public = isPublic
+	content.Tag = tag
+	err = m.DB.UpdateId(bson.ObjectIdHex(contentID), content)
+	if err != nil {
+		return err
+	}
+
+	err = m.DBuser.UpdateId(bson.ObjectIdHex(ownID), bson.M{"$inc": bson.M{"contentCount": 1}})
+	return err
+}
+
 // RemoveContent 删除内容
 func (m *ContentDB) RemoveContent(id string) (err error) {
+
 	if !bson.IsObjectIdHex(id) {
 		return errors.New(StatusNoID)
 	}
+	var content Content
+	err = m.DB.FindId(bson.ObjectIdHex(id)).One(&content)
+	if err != nil {
+		return err
+	}
 	err = m.DB.RemoveId(bson.ObjectIdHex(id))
+	if err != nil {
+		return err
+	}
+	err = m.DBuser.UpdateId(content.OwnID, bson.M{"$inc": bson.M{"contentCount": -1}})
 	return
 }
 
@@ -64,7 +103,11 @@ func (m *ContentDB) GetDetailByID(id string) (res ContentDetailres, err error) {
 	res.Data.LikeNum = c.LikeNum
 	res.Data.Public = c.Public
 	res.Data.Tag = c.Tag
-	err = m.DBuser.FindId(c.OwnID).Select(bson.M{"info.name": 1, "info.avatar": 1, "info.gender": 1}).One(&res.User)
+	var u User
+	err = m.DBuser.FindId(c.OwnID).One(&u)
+	res.User.Avatar = u.Info.Avatar
+	res.User.Gender = u.Info.Gender
+	res.User.Name = u.Info.Name
 	return
 }
 
@@ -74,7 +117,7 @@ func (m *ContentDB) GetPublic() (res ContentPublicList, err error) {
 		Allid bson.ObjectId `bson:"_id"`
 	}
 	var all []AllContentID
-	err = m.DB.Find(bson.M{"public": true}).Select(bson.M{"_id": 1}).All(&all)
+	err = m.DB.Find(bson.M{"public": true}).Sort("-publishDate").Select(bson.M{"_id": 1}).All(&all)
 	if err != nil {
 		return
 	}
@@ -92,7 +135,7 @@ func (m *ContentDB) GetPublic() (res ContentPublicList, err error) {
 //GetContentSelf 根据自己的用户id获取文章列表
 func (m *ContentDB) GetContentSelf(id string) (res ContentListByUser, err error) {
 	var c []Content
-	err = m.DB.Find(bson.M{"ownId": bson.ObjectIdHex(id)}).All(&c)
+	err = m.DB.Find(bson.M{"ownId": bson.ObjectIdHex(id)}).Sort("-publishDate").All(&c)
 	for _, value := range c {
 		var resc Contentres
 		resc.Detail = value.Detail
@@ -111,7 +154,7 @@ func (m *ContentDB) GetContentSelf(id string) (res ContentListByUser, err error)
 //GetContentByUser 获取他人的文章列表
 func (m *ContentDB) GetContentByUser(id string) (res ContentListByUser, err error) {
 	var c []Content
-	err = m.DB.Find(bson.M{"ownId": bson.ObjectIdHex(id), "public": true}).All(&c)
+	err = m.DB.Find(bson.M{"ownId": bson.ObjectIdHex(id), "public": true}).Sort("-publishDate").All(&c)
 	for _, value := range c {
 		var resc Contentres
 		resc.Detail = value.Detail

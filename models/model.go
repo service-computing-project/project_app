@@ -4,7 +4,7 @@
  * @Author: sunylin
  * @Date: 2020-12-14 23:13:17
  * @LastEditors: sunylin
- * @LastEditTime: 2020-12-17 02:58:03
+ * @LastEditTime: 2020-12-20 02:36:53
  */
 package models
 
@@ -12,22 +12,23 @@ import "gopkg.in/mgo.v2/bson"
 
 //Status
 const (
-	StatusSuccess           = "success"
-	StatusBadReq            = "bad_req"
-	StatusNotLogin          = "not_login"
-	StatusUserNameExist     = "username_exist"
-	StatusUserNameNotExist  = "username_notexist"
-	StatusEmailExist        = "email_exist"
-	StatusEmailFormatError  = "email_format_error"
-	StatusPasswordError     = "password_error"
-	StatusNoID              = "no_this_id"
-	StatusEmptyName         = "name_nil"
-	StatusEmptyEmail        = "email_nil"
-	StatusLikeExist         = "like_exist"
-	StatusLikeNotExist      = "like_not_exist"
-	StatusNoContent         = "no_this_content"
-	StatusNoUser            = "no_this_user"
-	StatusNotificationExist = "notification_exist"
+	StatusSuccess                = "success"
+	StatusBadReq                 = "bad_req"
+	StatusNotLogin               = "not_login"
+	StatusUserNameExist          = "username_exist"
+	StatusUserNameNotExist       = "username_notexist"
+	StatusEmailExist             = "email_exist"
+	StatusEmailFormatError       = "email_format_error"
+	StatusPasswordError          = "password_error"
+	StatusNoID                   = "no_this_id"
+	StatusEmptyName              = "name_nil"
+	StatusEmptyEmail             = "email_nil"
+	StatusLikeExist              = "like_exist"
+	StatusLikeNotExist           = "like_not_exist"
+	StatusNoContent              = "no_this_content"
+	StatusNoUser                 = "no_this_user"
+	StatusNotificationExist      = "notification_exist"
+	StatusUserContentNotMatching = "user_content_id_not_matching"
 )
 
 //User
@@ -141,8 +142,29 @@ type UserNotificationres struct {
 type NotificationDetail struct {
 	ID         bson.ObjectId `bson:"_id"`
 	CreateTime int64         `bson:"time"`
-	Content    string        `bson:"content"`  // 通知内容
-	SourceID   bson.ObjectId `bson:"sourceId"` // 源ID （点赞用户）
-	TargetID   bson.ObjectId `bson:"targetId"` // 目标ID （被点赞用户）
-	Type       string        `bson:"type"`     // 类型：暂时只有like
+	Content    string        `bson:"content"`   // 通知内容
+	SourceID   bson.ObjectId `bson:"sourceId"`  // 源ID （点赞用户）
+	TargetID   bson.ObjectId `bson:"targetId"`  // 目标ID （被点赞用户）
+	ContentID  bson.ObjectId `bson:"contentId"` //点赞文章ID
+	Type       string        `bson:"type"`      // 类型：暂时只有like
+}
+
+//RootRes 简单 API 服务列表
+type RootRes struct {
+	UserGetInfo string `json:"user_information_url"` 
+	UserPostLogin string `json:"user_login_url"` 
+	UserPostRegister string `json:"user_register_url"` 
+	UserPostLogout string `json:"user_logout_url"` 
+	UserPostName string `json:"user_rename_url"` 
+
+	ContentDeleteBy string `json:"content_url"` 
+	ContentGetDetailBy string `json:"content_detail_url"` 
+	ContentGetPublic string `json:"content_public_url"` 
+	ContentGetTexts string `json:"content_text_url"` 
+	ContentPostUpdate string `json:"content_upadate_url"` 
+
+	Like string `json:"like_url"` 
+
+	Notification string `json:"notification_url"` 
+	NotificationGetAll string `json:"notification_all_url"` 
 }
