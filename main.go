@@ -4,7 +4,7 @@
  * @Author: sunylin
  * @Date: 2020-12-15 22:38:08
  * @LastEditors: sunylin
- * @LastEditTime: 2020-12-18 17:48:41
+ * @LastEditTime: 2020-12-20 22:56:42
  */
 package main
 
@@ -113,5 +113,6 @@ func myMiddleware(ctx iris.Context) {
 	ctx.Application().Logger().Infof("Runs before %s", ctx.Path())
 	ctx.Recorder().ResetHeaders()
 	ctx.Header("Access-Control-Allow-Origin", "*")
+	ctx.Header("Access-Control-Allow-Headers", "content-type")
 	ctx.Next()
 }
