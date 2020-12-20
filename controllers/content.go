@@ -35,6 +35,11 @@ func (c *ContentController) GetDetailBy(contentID string) (res models.ContentDet
 	return
 }
 
+//Options options
+func (c *ContentController) Options() {
+	return
+}
+
 //DeleteBy DELETE /api/content/{contentID:string}  删除指定内容
 func (c *ContentController) DeleteBy(contentID string) (res models.CommonRes) {
 	if c.Session.Get("id") == nil {
@@ -117,6 +122,11 @@ type TextReq struct {
 	IsPublic bool     `json:"isPublic"`
 }
 
+//OptionsText  OPTIONS /api/content/text 增加文本内容
+func (c *ContentController) OptionsText() {
+	return
+}
+
 //PostText  POST /api/content/text 增加文本内容
 func (c *ContentController) PostText() (res models.CommonRes) {
 	id := c.Session.Get("id")
@@ -150,12 +160,17 @@ func (c *ContentController) PostText() (res models.CommonRes) {
 	return
 }
 
-//UpdateReq POST /api/content/text 增加文本内容
+//TextUpdateReq 文本内容
 type TextUpdateReq struct {
 	ID       string   `json:"contentID"`
 	Detail   string   `json:"detail"`
 	Tags     []string `json:"tags"`
 	IsPublic bool     `json:"isPublic"`
+}
+
+//OptionsUpdate OPTIONS /api/content/update 增加文本内容
+func (c *ContentController) OptionsUpdate() {
+	return
 }
 
 //PostUpdate  POST /api/content/update 增加文本内容

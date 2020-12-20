@@ -34,7 +34,12 @@ func (c *LikeController) GetBy(id string) (res LikeRes) {
 	return
 }
 
-//​ PostBy POST /like/{contentID} 对某个内容点赞
+//Options Options /like/{contentID} 对某个内容点赞
+func (c *LikeController) Options() {
+	return
+}
+
+//​PostBy POST /like/{contentID} 对某个内容点赞
 func (c *LikeController) PostBy(id string) (res models.CommonRes) {
 	if c.Session.Get("id") == nil {
 		res.State = models.StatusNotLogin
@@ -44,7 +49,7 @@ func (c *LikeController) PostBy(id string) (res models.CommonRes) {
 		res.State = models.StatusBadReq
 		return
 	}
-	err := c.Model.LikeByID(id,c.Session.Get("id").(string))
+	err := c.Model.LikeByID(id, c.Session.Get("id").(string))
 	if err != nil {
 		res.State = err.Error()
 	}
@@ -62,7 +67,7 @@ func (c *LikeController) PatchBy(id string) (res models.CommonRes) {
 		res.State = models.StatusBadReq
 		return
 	}
-	err := c.Model.CancelLikeByID(id,c.Session.Get("id").(string))
+	err := c.Model.CancelLikeByID(id, c.Session.Get("id").(string))
 	if err != nil {
 		res.State = err.Error()
 	}

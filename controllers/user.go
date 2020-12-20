@@ -20,7 +20,12 @@ type RegisterReq struct {
 	Password string `json:"password"`
 }
 
-//PostLogin POST /user/register 用户注册
+//OptionsRegister OPTIONS /user/register 用户注册
+func (c *UsersController) OptionsRegister() {
+	return
+}
+
+//PostRegister POST /user/register 用户注册
 func (c *UsersController) PostRegister() (res models.CommonRes) {
 	req := RegisterReq{}
 	if err := c.Ctx.ReadJSON(&req); err != nil {
@@ -87,6 +92,11 @@ func (c *UsersController) PostLogout() (res models.CommonRes) {
 //NameReq POST /user/name 更新用户名
 type NameReq struct {
 	Name string `json:"name"`
+}
+
+//OptionsName OPTIONS /user/name
+func (c *UsersController) OptionsName() {
+	return
 }
 
 //PostName POST /user/name 更新用户名 (Token required)
