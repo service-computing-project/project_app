@@ -106,7 +106,7 @@ func main() {
 
 	// Listens and serves incoming http requests
 	// on http://localhost:8080.
-	app.Listen("localhost:8080")
+	app.Listen("0.0.0.0:8080")
 }
 
 func myMiddleware(ctx iris.Context) {
