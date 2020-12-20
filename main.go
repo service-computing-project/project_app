@@ -64,22 +64,22 @@ func main() {
 
 	app.Handle("GET", "/api", func(ctx iris.Context) {
 		ctx.JSON(models.RootRes{
-			"http://47.103.210.109:8080/api/user/info/{userID:string}",
+			"http://47.103.210.109:8080/api/user/info/{userID}",
 			"http://47.103.210.109:8080/api/user/login",
 			"http://47.103.210.109:8080/api/user/register",
 			"http://47.103.210.109:8080/api/user/logout",
 			"http://47.103.210.109:8080/api/user/name",
 
-			"http://47.103.210.109:8080/api/content/{contentID:string}",
-			"http://47.103.210.109:8080/api/content/detail/{contentID:string}",
+			"http://47.103.210.109:8080/api/content/{contentID}",
+			"http://47.103.210.109:8080/api/content/detail/{contentID}",
 			"http://47.103.210.109:8080/api/content/public",
-			"http://47.103.210.109:8080/api/content/texts/{userID:string}",
+			"http://47.103.210.109:8080/api/content/texts/{userID}",
 			"http://47.103.210.109:8080/api/content/update",
 
 			"http://47.103.210.109:8080/api/like/{contentID}",
-			
+
+			"http://47.103.210.109:8080/api/notificaiton/{notificationID}",
 			"http://47.103.210.109:8080/api/notification/all",
-			"http://47.103.210.109:8080/api/notificaiton/{NotificationID:string}",	
 		})
 	})
 
