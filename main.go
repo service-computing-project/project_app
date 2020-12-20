@@ -4,7 +4,7 @@
  * @Author: sunylin
  * @Date: 2020-12-15 22:38:08
  * @LastEditors: sunylin
- * @LastEditTime: 2020-12-21 02:38:58
+ * @LastEditTime: 2020-12-21 03:28:01
  */
 package main
 
@@ -123,11 +123,11 @@ func myMiddleware(ctx iris.Context) {
 	//ctx.Header("Access-Control-Allow-Origin", "*")
 	//ctx.Header("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,PATCH,OPTIONS")
 	//.Header("Access-Control-Allow-Headers", "Content-Type, Accept, Authorization")
-	//if ctx.Request().Method == "OPTIONS" {
-	//	fmt.Println("test for core")
-	//	ctx.StatusCode(http.StatusOK)
-	//	return
-	//}
+	// if ctx.Request().Method == "OPTIONS" {
+	// 	fmt.Println("test for core")
+	// 	ctx.StatusCode(http.StatusOK)
+	// 	return
+	// }
 	ctx.Next()
 	//ctx.Next()
 }
