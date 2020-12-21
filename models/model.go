@@ -4,7 +4,7 @@
  * @Author: sunylin
  * @Date: 2020-12-14 23:13:17
  * @LastEditors: sunylin
- * @LastEditTime: 2020-12-20 02:36:53
+ * @LastEditTime: 2020-12-21 22:06:08
  */
 package models
 
@@ -29,6 +29,7 @@ const (
 	StatusNoUser                 = "no_this_user"
 	StatusNotificationExist      = "notification_exist"
 	StatusUserContentNotMatching = "user_content_id_not_matching"
+	StatusContentOutofRange      = "content_out_of_range"
 )
 
 //User
@@ -151,20 +152,20 @@ type NotificationDetail struct {
 
 //RootRes 简单 API 服务列表
 type RootRes struct {
-	UserGetInfo string `json:"user_information_url"` 
-	UserPostLogin string `json:"user_login_url"` 
-	UserPostRegister string `json:"user_register_url"` 
-	UserPostLogout string `json:"user_logout_url"` 
-	UserPostName string `json:"user_rename_url"` 
+	UserGetInfo      string `json:"user_information_url"`
+	UserPostLogin    string `json:"user_login_url"`
+	UserPostRegister string `json:"user_register_url"`
+	UserPostLogout   string `json:"user_logout_url"`
+	UserPostName     string `json:"user_rename_url"`
 
-	ContentDeleteBy string `json:"content_url"` 
-	ContentGetDetailBy string `json:"content_detail_url"` 
-	ContentGetPublic string `json:"content_public_url"` 
-	ContentGetTexts string `json:"content_text_url"` 
-	ContentPostUpdate string `json:"content_upadate_url"` 
+	ContentDeleteBy    string `json:"content_url"`
+	ContentGetDetailBy string `json:"content_detail_url"`
+	ContentGetPublic   string `json:"content_public_url"`
+	ContentGetTexts    string `json:"content_text_url"`
+	ContentPostUpdate  string `json:"content_upadate_url"`
 
-	Like string `json:"like_url"` 
+	Like string `json:"like_url"`
 
-	Notification string `json:"notification_url"` 
-	NotificationGetAll string `json:"notification_all_url"` 
+	Notification       string `json:"notification_url"`
+	NotificationGetAll string `json:"notification_all_url"`
 }
