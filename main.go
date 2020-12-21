@@ -96,19 +96,19 @@ func main() {
 		AllowCredentials: true,
 	})
 	users := mvc.New(app.Party("/api/user", crs).AllowMethods())
-	//users.Register(sess.Start)
+	users.Register(sess.Get)
 	users.Handle(&controllers.UsersController{Model: user})
 
 	likes := mvc.New(app.Party("/api/like", crs).AllowMethods())
-	//likes.Register(sess.Start)
+	likes.Register(sess.Get)
 	likes.Handle(&controllers.LikeController{Model: like})
 
 	contents := mvc.New(app.Party("/api/content", crs).AllowMethods())
-	//contents.Register(sess.Start)
+	contents.Register(sess.Get)
 	contents.Handle(&controllers.ContentController{Model: content})
 
 	notifications := mvc.New(app.Party("/api/notification", crs).AllowMethods())
-	//notifications.Register(sess.Start)
+	notifications.Register(sess.Get)
 	notifications.Handle(&controllers.NotificationController{Model: notification})
 
 	// Listens and serves incoming http requests
