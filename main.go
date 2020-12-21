@@ -10,8 +10,6 @@ package main
 
 import (
 	"fmt"
-	"net/http"
-
 	"github.com/dgrijalva/jwt-go"
 	"github.com/dgrijalva/jwt-go/request"
 	"github.com/iris-contrib/middleware/cors"
