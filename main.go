@@ -88,14 +88,15 @@ func main() {
 	//session的创建
 	sess := sessions.New(sessions.Config{
 		Cookie: sessionID,
-		DisableSubdomainPersistence: true,
+		//DisableSubdomainPersistence: true,
 	})
+	app.Use(sess.Handler())
 	crs := cors.New(cors.Options{
 		AllowedOrigins:   []string{"*"}, //允许通过的主机名称
 		AllowCredentials: true,
 	})
 	users := mvc.New(app.Party("/api/user", crs).AllowMethods())
-	users.Register(sess.Start)
+	//users.Register(sess.Start)
 	users.Handle(&controllers.UsersController{Model: user})
 
 	likes := mvc.New(app.Party("/api/like", crs).AllowMethods())
