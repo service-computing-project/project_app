@@ -89,7 +89,7 @@ func main() {
 	sess := sessions.New(sessions.Config{
 		Cookie: sessionID,
 		//DisableSubdomainPersistence: true,
-		CookieSecureTLS: true,
+		//CookieSecureTLS: true,
 	})
 	app.Use(sess.Handler())
 	users := mvc.New(app.Party("/api/user"))
