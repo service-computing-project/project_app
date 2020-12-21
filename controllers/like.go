@@ -1,6 +1,8 @@
 package controllers
 
 import (
+	"net/http"
+
 	"github.com/globalsign/mgo/bson"
 	"github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/sessions"
@@ -36,6 +38,7 @@ func (c *LikeController) GetBy(id string) (res LikeRes) {
 
 //Options Options /like/{contentID} 对某个内容点赞
 func (c *LikeController) OptionsBy(id string) {
+	c.Ctx.StatusCode(http.StatusOK)
 	return
 }
 

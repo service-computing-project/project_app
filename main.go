@@ -130,7 +130,6 @@ func myMiddleware(ctx iris.Context) {
 	if ctx.Request().Method == "OPTIONS" {
 		fmt.Println("test for core")
 		ctx.StatusCode(http.StatusOK)
-		return
 	}
 	ctx.Next()
 	//ctx.Next()
