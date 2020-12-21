@@ -92,7 +92,7 @@ func main() {
 	app.Use(sess.Handler())
 	crs := cors.New(cors.Options{
 		//AllowedOrigins:   []string{"*"}, //允许通过的主机名称
-		AllowCredentials: true,
+		//AllowCredentials: true,
 	})
 	users := mvc.New(app.Party("/api/user", crs).AllowMethods())
 	users.Register(sess.Start)
@@ -121,7 +121,7 @@ func myMiddleware(ctx iris.Context) {
 	//ctx.Recorder().ResetHeaders()
 	//ctx.Header("Access-Control-Allow-Origin", "*")
 	//ctx.Header("Access-Control-Allow-Headers", "content-type")
-	
+	ctx.Header("Access-Control-Allow-Credentials","true");
 	fmt.Println("Method", ctx.Request().Method)
 	if ctx.Request().Method == "OPTIONS" {
 		fmt.Println("test for core")
