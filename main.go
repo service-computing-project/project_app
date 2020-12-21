@@ -121,7 +121,7 @@ func myMiddleware(ctx iris.Context) {
 	//ctx.Header("Access-Control-Allow-Headers", "content-type")
 	ctx.Header("Access-Control-Allow-Credentials", "true")
 	ctx.Header("Access-Control-Allow-Origin", ctx.GetHeader("Origin"))
-	ctx.SetCookieKV("SameSite", "4")
+	//ctx.SetCookieKV("SameSite", "4")
 	fmt.Println("Method", ctx.Request().Method)
 	if ctx.Request().Method == "OPTIONS" {
 		fmt.Println("test for core")
