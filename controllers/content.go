@@ -1,6 +1,8 @@
 package controllers
 
 import (
+	"fmt"
+
 	"github.com/dgrijalva/jwt-go"
 	"github.com/dgrijalva/jwt-go/request"
 	"github.com/service-computing-project/project_app/models"
@@ -47,6 +49,7 @@ func (c *ContentController) OptionsBy(contentID string) {
 
 //DeleteBy DELETE /api/content/{contentID:string}  删除指定内容
 func (c *ContentController) DeleteBy(contentID string) (res models.CommonRes) {
+	fmt.Println("hahahahdelete")
 	if c.Session.Get("id") == nil {
 		res.State = models.StatusNotLogin
 	}
