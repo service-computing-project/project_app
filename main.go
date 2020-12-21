@@ -121,13 +121,14 @@ func myMiddleware(ctx iris.Context) {
 	//ctx.Recorder().ResetHeaders()
 	//ctx.Header("Access-Control-Allow-Origin", "*")
 	//ctx.Header("Access-Control-Allow-Headers", "content-type")
-	//ctx.Header("Access-Control-Allow-Origin", "*")
+	
 	fmt.Println("Method", ctx.Request().Method)
 	if ctx.Request().Method == "OPTIONS" {
 		fmt.Println("test for core")
 		ctx.StatusCode(204)	
 		ctx.Header("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,PATCH,OPTIONS")
 		ctx.Header("Access-Control-Allow-Headers", "Content-Type, Accept, Authorization")
+		ctx.Header("Access-Control-Allow-Origin", "*")
 		return
 	}
 	ctx.Next()
