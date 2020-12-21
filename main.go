@@ -10,6 +10,7 @@ package main
 
 import (
 	"fmt"
+	"net/http"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/dgrijalva/jwt-go/request"
@@ -125,7 +126,7 @@ func myMiddleware(ctx iris.Context) {
 	//ctx.Header("Access-Control-Allow-Origin", "*")
 	//ctx.Header("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,PATCH,OPTIONS")
 	//.Header("Access-Control-Allow-Headers", "Content-Type, Accept, Authorization")
-	fmt.Println("Method",ctx.Request().Method)
+	fmt.Println("Method", ctx.Request().Method)
 	if ctx.Request().Method == "OPTIONS" {
 		fmt.Println("test for core")
 		ctx.StatusCode(http.StatusOK)
