@@ -150,7 +150,6 @@ func myMiddleware(ctx iris.Context) {
 		ctx.StatusCode(200)	
 		ctx.Header("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,PATCH,OPTIONS")
 		ctx.Header("Access-Control-Allow-Headers", "Content-Type, Accept, Authorization")
-		ctx.Header("Access-Control-Allow-Origin", "*")
 		return
 	}
 	if ctx.Request().Method != "GET" && ctx.Request().Method != "POST"  {
