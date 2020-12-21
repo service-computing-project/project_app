@@ -100,15 +100,15 @@ func main() {
 	users.Handle(&controllers.UsersController{Model: user})
 
 	likes := mvc.New(app.Party("/api/like", crs).AllowMethods())
-	likes.Register(sess.Start)
+	//likes.Register(sess.Start)
 	likes.Handle(&controllers.LikeController{Model: like})
 
 	contents := mvc.New(app.Party("/api/content", crs).AllowMethods())
-	contents.Register(sess.Start)
+	//contents.Register(sess.Start)
 	contents.Handle(&controllers.ContentController{Model: content})
 
 	notifications := mvc.New(app.Party("/api/notification", crs).AllowMethods())
-	notifications.Register(sess.Start)
+	//notifications.Register(sess.Start)
 	notifications.Handle(&controllers.NotificationController{Model: notification})
 
 	// Listens and serves incoming http requests
