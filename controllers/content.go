@@ -73,17 +73,27 @@ func (c *ContentController) DeleteBy(contentID string) (res models.CommonRes) {
 	return
 }
 
-// type PageParams struct {
-// 	Page    int `url:"page"`
-// 	PerPage int `url:"per_page"`
-// }
+type PageParams struct {
+	Page    int `url:"page"`
+	PerPage int `url:"per_page"`
+}
 
 //GetPublic GET /api/content/public  获取公共内容
 func (c *ContentController) GetPublic() (res models.ContentPublicList) {
 	if c.Session.Get("id") == nil {
 		res.State = models.StatusNotLogin
 	}
-	contentpublicres, err := c.Model.GetPublic()
+	params := PageParams{}
+	err := c.Ctx.ReadQuery(&params)
+	if err != nil && !iris.IsErrPath(err){
+		res.State = models.StatusBadReq
+		return
+	}	
+	if params.Page < 1 || params.PerPage < 1 {
+		res.State = models.StatusBadReq
+		return
+	}
+	contentpublicres, err := c.Model.GetPublic(params.Page,params.PerPage)
 	res = contentpublicres
 	if err != nil {
 		res.State = err.Error()
@@ -97,6 +107,16 @@ func (c *ContentController) GetPublic() (res models.ContentPublicList) {
 func (c *ContentController) GetUsercontentBy(userID string) (res models.ContentListByUser) {
 	var contentlistbyuserres models.ContentListByUser
 	var err error
+	params := PageParams{}
+	err = c.Ctx.ReadQuery(&params)
+	if err != nil && !iris.IsErrPath(err){
+		res.State = models.StatusBadReq
+		return
+	}	
+	if params.Page < 1 || params.PerPage < 1 {
+		res.State = models.StatusBadReq
+		return
+	}
 	if userID == "" {
 		res.State = models.StatusBadReq
 		return
@@ -106,9 +126,9 @@ func (c *ContentController) GetUsercontentBy(userID string) (res models.ContentL
 			return
 		}
 		userID = c.Session.GetString("id")
-		contentlistbyuserres, err = c.Model.GetContentSelf(userID)
+		contentlistbyuserres, err = c.Model.GetContentSelf(userID,params.Page,params.PerPage)
 	} else {
-		contentlistbyuserres, err = c.Model.GetContentByUser(userID)
+		contentlistbyuserres, err = c.Model.GetContentByUser(userID,params.Page,params.PerPage)
 	}
 
 	res = contentlistbyuserres
