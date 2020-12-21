@@ -119,11 +119,11 @@ func main() {
 	users.Register(sess.Start)
 	users.Handle(&controllers.UsersController{Model: user})
 
-	likes := mvc.New(app.Party("/api/like", crs).AllowMethods())
+	likes := mvc.New(app.Party("/api/like"))
 	likes.Register(sess.Start)
 	likes.Handle(&controllers.LikeController{Model: like})
 
-	contents := mvc.New(app.Party("/api/content", crs).AllowMethods())
+	contents := mvc.New(app.Party("/api/content"))
 	contents.Register(sess.Start)
 	contents.Handle(&controllers.ContentController{Model: content})
 
