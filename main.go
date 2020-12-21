@@ -4,7 +4,7 @@
  * @Author: sunylin
  * @Date: 2020-12-15 22:38:08
  * @LastEditors: sunylin
- * @LastEditTime: 2020-12-21 20:43:01
+ * @LastEditTime: 2020-12-21 21:42:58
  */
 package main
 
@@ -89,6 +89,7 @@ func main() {
 	sess := sessions.New(sessions.Config{
 		Cookie: sessionID,
 		//DisableSubdomainPersistence: true,
+		CookieSecureTLS: true,
 	})
 	app.Use(sess.Handler())
 	users := mvc.New(app.Party("/api/user"))
