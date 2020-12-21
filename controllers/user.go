@@ -74,7 +74,7 @@ func (c *UsersController) PostLogin() (res models.CommonRes) {
 		// // 这里的密钥和前面的必须一样
 		// tokenString, _ := token.SignedString([]byte("My Secret"))
 		// res.Data = tokenString
-		c.Session.Set("myid", userID)
+		c.Session.Set("id", userID)
 		fmt.Println(c.Session)
 		res.State = models.StatusSuccess
 	}
@@ -84,11 +84,11 @@ func (c *UsersController) PostLogin() (res models.CommonRes) {
 //PostLogout POST /user/logout 退出登陆
 func (c *UsersController) PostLogout() (res models.CommonRes) {
 	fmt.Println(c.Session)
-	if c.Session.Get("myid") == nil {
+	if c.Session.Get("id") == nil {
 		res.State = models.StatusNotLogin
 		return
 	}
-	c.Session.Delete("myid")
+	c.Session.Delete("id")
 	res.State = models.StatusSuccess
 	return
 }
