@@ -162,19 +162,19 @@ func (c *ContentController) PostText() (res models.CommonRes) {
 		res.State = models.StatusNotLogin
 		return
 	}
-	// //token check
-	// token, err := request.ParseFromRequest(c.Ctx.Request(), request.AuthorizationHeaderExtractor,
-	// 	func(token *jwt.Token) (i interface{}, e error) {
-	// 		return []byte("My Secret"), nil
-	// 	})
+	//token check
+	token, err := request.ParseFromRequest(c.Ctx.Request(), request.AuthorizationHeaderExtractor,
+		func(token *jwt.Token) (i interface{}, e error) {
+			return []byte("My Secret"), nil
+		})
 
-	// if err != nil || !token.Valid {
-	// 	res.Data = err.Error()
-	// 	res.State = models.StatusBadReq
-	// 	return
-	// }
+	if err != nil || !token.Valid {
+		res.Data = err.Error()
+		res.State = models.StatusBadReq
+		return
+	}
 	req := TextReq{}
-	err := c.Ctx.ReadJSON(&req)
+	err = c.Ctx.ReadJSON(&req)
 	if err != nil || req.Detail == "" {
 		res.State = models.StatusBadReq
 		return
@@ -208,19 +208,19 @@ func (c *ContentController) PostUpdate() (res models.CommonRes) {
 		res.State = models.StatusNotLogin
 		return
 	}
-	// //token check
-	// token, err := request.ParseFromRequest(c.Ctx.Request(), request.AuthorizationHeaderExtractor,
-	// 	func(token *jwt.Token) (i interface{}, e error) {
-	// 		return []byte("My Secret"), nil
-	// 	})
+	//token check
+	token, err := request.ParseFromRequest(c.Ctx.Request(), request.AuthorizationHeaderExtractor,
+		func(token *jwt.Token) (i interface{}, e error) {
+			return []byte("My Secret"), nil
+		})
 
-	// if err != nil || !token.Valid {
-	// 	res.Data = err.Error()
-	// 	res.State = models.StatusBadReq
-	// 	return
-	// }
+	if err != nil || !token.Valid {
+		res.Data = err.Error()
+		res.State = models.StatusBadReq
+		return
+	}
 	req := TextUpdateReq{}
-	err := c.Ctx.ReadJSON(&req)
+	err = c.Ctx.ReadJSON(&req)
 	if err != nil || req.Detail == "" {
 		res.State = models.StatusBadReq
 		return

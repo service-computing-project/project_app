@@ -2,7 +2,10 @@ package controllers
 
 import (
 	"fmt"
-	
+	"time"
+
+	"github.com/dgrijalva/jwt-go"
+	"github.com/dgrijalva/jwt-go/request"
 	"github.com/globalsign/mgo/bson"
 	"github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/sessions"
@@ -65,15 +68,15 @@ func (c *UsersController) PostLogin() (res models.CommonRes) {
 	if err != nil {
 		res.State = err.Error()
 	} else {
-		// token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		// 	"name":     req.Name,
-		// 	"password": req.Password,
-		// 	"exp":      time.Now().Add(time.Hour * 1).Unix(),
-		// })
+		token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+			"name":     req.Name,
+			"password": req.Password,
+			"exp":      time.Now().Add(time.Hour * 1).Unix(),
+		})
 
-		// // 这里的密钥和前面的必须一样
-		// tokenString, _ := token.SignedString([]byte("My Secret"))
-		// res.Data = tokenString
+		// 这里的密钥和前面的必须一样
+		tokenString, _ := token.SignedString([]byte("My Secret"))
+		res.Data = tokenString
 		c.Session.Set("id", userID)
 		fmt.Println(c.Session)
 		res.State = models.StatusSuccess
@@ -109,18 +112,18 @@ func (c *UsersController) PostName() (res models.CommonRes) {
 		res.State = models.StatusNotLogin
 		return
 	}
-	// token, err := request.ParseFromRequest(c.Ctx.Request(), request.AuthorizationHeaderExtractor,
-	// 	func(token *jwt.Token) (i interface{}, e error) {
-	// 		return []byte("My Secret"), nil
-	// 	})
+	token, err := request.ParseFromRequest(c.Ctx.Request(), request.AuthorizationHeaderExtractor,
+		func(token *jwt.Token) (i interface{}, e error) {
+			return []byte("My Secret"), nil
+		})
 
-	// if err != nil || !token.Valid {
-	// 	res.Data = err.Error()
-	// 	res.State = models.StatusBadReq
-	// 	return
-	// }
+	if err != nil || !token.Valid {
+		res.Data = err.Error()
+		res.State = models.StatusBadReq
+		return
+	}
 	req := NameReq{}
-	err := c.Ctx.ReadJSON(&req)
+	err = c.Ctx.ReadJSON(&req)
 	if err != nil || req.Name == "" {
 		res.State = models.StatusBadReq
 		return
