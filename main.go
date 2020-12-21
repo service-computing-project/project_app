@@ -61,31 +61,9 @@ func main() {
 
 	app := iris.New()
 	app.Use(myMiddleware)
-	//app.Use(Cors)
 	app.Handle("GET", "/api", func(ctx iris.Context) {
 		ctx.JSON(models.RootRes{
 			"http://47.103.210.109:8080/api/user/info/{userID}",
-			"http://47.103.210.109:8080/api/user/login",
-			"http://47.103.210.109:8080/api/user/register",
-			"http://47.103.210.109:8080/api/user/logout",
-			"http://47.103.210.109:8080/api/user/name",
-
-			"http://47.103.210.109:8080/api/content/{contentID}",
-			"http://47.103.210.109:8080/api/content/detail/{contentID}",
-			"http://47.103.210.109:8080/api/content/public",
-			"http://47.103.210.109:8080/api/content/texts/{userID}",
-			"http://47.103.210.109:8080/api/content/update",
-
-			"http://47.103.210.109:8080/api/like/{contentID}",
-
-			"http://47.103.210.109:8080/api/notificaiton/{notificationID}",
-			"http://47.103.210.109:8080/api/notification/all",
-		})
-	})
-
-	app.Handle("DELETE", "/api", func(ctx iris.Context) {
-		ctx.JSON(models.RootRes{
-			"AAAAAAA",
 			"http://47.103.210.109:8080/api/user/login",
 			"http://47.103.210.109:8080/api/user/register",
 			"http://47.103.210.109:8080/api/user/logout",
@@ -111,11 +89,7 @@ func main() {
 		//DisableSubdomainPersistence: true,
 	})
 	app.Use(sess.Handler())
-	crs := cors.New(cors.Options{
-		//AllowedOrigins:   []string{"*"}, //允许通过的主机名称
-		//AllowCredentials: true,
-	})
-	users := mvc.New(app.Party("/api/user", crs).AllowMethods())
+	users := mvc.New(app.Party("/api/user"))
 	users.Register(sess.Start)
 	users.Handle(&controllers.UsersController{Model: user})
 
@@ -127,7 +101,7 @@ func main() {
 	contents.Register(sess.Start)
 	contents.Handle(&controllers.ContentController{Model: content})
 
-	notifications := mvc.New(app.Party("/api/notification", crs).AllowMethods())
+	notifications := mvc.New(app.Party("/api/notification"))
 	notifications.Register(sess.Start)
 	notifications.Handle(&controllers.NotificationController{Model: notification})
 
@@ -151,9 +125,6 @@ func myMiddleware(ctx iris.Context) {
 		ctx.Header("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,PATCH,OPTIONS")
 		ctx.Header("Access-Control-Allow-Headers", "Content-Type, Accept, Authorization")
 		return
-	}
-	if ctx.Request().Method != "GET" && ctx.Request().Method != "POST"  {
-		
 	}
 	ctx.Next()
 }
