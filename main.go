@@ -87,8 +87,8 @@ func main() {
 	sessionID := "mySession"
 	//session的创建
 	sess := sessions.New(sessions.Config{
-		//Cookie: sessionID,
-		//DisableSubdomainPersistence: true,
+		Cookie: sessionID,
+		DisableSubdomainPersistence: true,
 	})
 	crs := cors.New(cors.Options{
 		AllowedOrigins:   []string{"*"}, //允许通过的主机名称
