@@ -4,7 +4,7 @@
  * @Author: sunylin
  * @Date: 2020-12-15 22:38:08
  * @LastEditors: sunylin
- * @LastEditTime: 2020-12-21 03:28:01
+ * @LastEditTime: 2020-12-21 14:35:23
  */
 package main
 
@@ -91,7 +91,8 @@ func main() {
 		//DisableSubdomainPersistence: true,
 	})
 	crs := cors.New(cors.Options{
-		AllowedOrigins: []string{"*"}, //允许通过的主机名称
+		AllowedOrigins:   []string{"*"}, //允许通过的主机名称
+		AllowCredentials: true,
 	})
 	users := mvc.New(app.Party("/api/user", crs).AllowMethods())
 	users.Register(sess.Start)

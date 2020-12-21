@@ -4,7 +4,7 @@
  * @Author: sunylin
  * @Date: 2020-12-15 17:25:48
  * @LastEditors: sunylin
- * @LastEditTime: 2020-12-21 03:35:59
+ * @LastEditTime: 2020-12-21 14:25:41
  */
 package models
 
@@ -121,7 +121,7 @@ func (m *ContentDB) GetPublic(page, eachpage int) (res ContentPublicList, err er
 	if err != nil {
 		return
 	}
-	for _, value := range all[(page-1)*eachpage : page*eachpage-1] {
+	for _, value := range all[(page-1)*eachpage : page*eachpage] {
 		var data ContentDetailres
 		data, err = m.GetDetailByID(value.Allid.Hex())
 		if err != nil {
@@ -136,7 +136,7 @@ func (m *ContentDB) GetPublic(page, eachpage int) (res ContentPublicList, err er
 func (m *ContentDB) GetContentSelf(id string, page, eachpage int) (res ContentListByUser, err error) {
 	var c []Content
 	err = m.DB.Find(bson.M{"ownId": bson.ObjectIdHex(id)}).All(&c)
-	for _, value := range c[(page-1)*eachpage : page*eachpage-1] {
+	for _, value := range c[(page-1)*eachpage : page*eachpage] {
 		var resc Contentres
 		resc.Detail = value.Detail
 		resc.ID = value.ID.Hex()
@@ -155,7 +155,7 @@ func (m *ContentDB) GetContentSelf(id string, page, eachpage int) (res ContentLi
 func (m *ContentDB) GetContentByUser(id string, page, eachpage int) (res ContentListByUser, err error) {
 	var c []Content
 	err = m.DB.Find(bson.M{"ownId": bson.ObjectIdHex(id), "public": true}).All(&c)
-	for _, value := range c[(page-1)*eachpage : page*eachpage-1] {
+	for _, value := range c[(page-1)*eachpage : page*eachpage] {
 		var resc Contentres
 		resc.Detail = value.Detail
 		resc.ID = value.ID.Hex()

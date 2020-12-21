@@ -85,15 +85,15 @@ func (c *ContentController) GetPublic() (res models.ContentPublicList) {
 	}
 	params := PageParams{}
 	err := c.Ctx.ReadQuery(&params)
-	if err != nil && !iris.IsErrPath(err){
+	if err != nil && !iris.IsErrPath(err) {
 		res.State = models.StatusBadReq
 		return
-	}	
+	}
 	if params.Page < 1 || params.PerPage < 1 {
 		res.State = models.StatusBadReq
 		return
 	}
-	contentpublicres, err := c.Model.GetPublic(params.Page,params.PerPage)
+	contentpublicres, err := c.Model.GetPublic(params.Page, params.PerPage)
 	res = contentpublicres
 	if err != nil {
 		res.State = err.Error()
@@ -103,16 +103,16 @@ func (c *ContentController) GetPublic() (res models.ContentPublicList) {
 	return
 }
 
-//GetUsercontentBy GET /api/content/detail/{userID:string} 获取指定用户的所有内容
+//GetUsercontentBy GET /api/content/usercontent/{userID:string} 获取指定用户的所有内容
 func (c *ContentController) GetUsercontentBy(userID string) (res models.ContentListByUser) {
 	var contentlistbyuserres models.ContentListByUser
 	var err error
 	params := PageParams{}
 	err = c.Ctx.ReadQuery(&params)
-	if err != nil && !iris.IsErrPath(err){
+	if err != nil && !iris.IsErrPath(err) {
 		res.State = models.StatusBadReq
 		return
-	}	
+	}
 	if params.Page < 1 || params.PerPage < 1 {
 		res.State = models.StatusBadReq
 		return
@@ -126,9 +126,9 @@ func (c *ContentController) GetUsercontentBy(userID string) (res models.ContentL
 			return
 		}
 		userID = c.Session.GetString("id")
-		contentlistbyuserres, err = c.Model.GetContentSelf(userID,params.Page,params.PerPage)
+		contentlistbyuserres, err = c.Model.GetContentSelf(userID, params.Page, params.PerPage)
 	} else {
-		contentlistbyuserres, err = c.Model.GetContentByUser(userID,params.Page,params.PerPage)
+		contentlistbyuserres, err = c.Model.GetContentByUser(userID, params.Page, params.PerPage)
 	}
 
 	res = contentlistbyuserres
