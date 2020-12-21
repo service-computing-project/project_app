@@ -35,7 +35,7 @@ func (c *LikeController) GetBy(id string) (res LikeRes) {
 }
 
 //Options Options /like/{contentID} 对某个内容点赞
-func (c *LikeController) Options() {
+func (c *LikeController) OptionsBy(id string) {
 	return
 }
 
