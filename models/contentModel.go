@@ -4,7 +4,7 @@
  * @Author: sunylin
  * @Date: 2020-12-15 17:25:48
  * @LastEditors: sunylin
- * @LastEditTime: 2020-12-21 22:13:54
+ * @LastEditTime: 2020-12-21 22:26:09
  */
 package models
 
@@ -123,7 +123,7 @@ func (m *ContentDB) GetPublic(page, eachpage int) (res ContentPublicList, err er
 	}
 	var start int
 	var end int
-	if len(all) > (page-1)*eachpage {
+	if len(all) < (page-1)*eachpage {
 		err = errors.New(StatusContentOutofRange)
 		return
 	} else {
@@ -157,7 +157,7 @@ func (m *ContentDB) GetContentSelf(id string, page, eachpage int) (res ContentLi
 	} else {
 		start = (page - 1) * eachpage
 	}
-	if len(c) > page*eachpage {
+	if len(c) < page*eachpage {
 		end = page * eachpage
 	} else {
 		end = len(c)
@@ -183,7 +183,7 @@ func (m *ContentDB) GetContentByUser(id string, page, eachpage int) (res Content
 	err = m.DB.Find(bson.M{"ownId": bson.ObjectIdHex(id), "public": true}).All(&c)
 	var start int
 	var end int
-	if len(c) > (page-1)*eachpage {
+	if len(c) < (page-1)*eachpage {
 		err = errors.New(StatusContentOutofRange)
 		return
 	} else {
