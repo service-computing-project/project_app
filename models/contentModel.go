@@ -47,21 +47,20 @@ func (m *ContentDB) UpdateContent(contentID, detail string, tag []string, ownID 
 		err = errors.New(StatusUserContentNotMatching)
 		return err
 	}
-
+	var old Content
+	err = m.DB.Find(bson.M{"_id": bson.ObjectIdHex(contentID), "ownId": bson.ObjectIdHex(ownID)}).One(&old)
+	if err != nil {
+		return err
+	}
 	var content Content
 	content.ID = bson.ObjectIdHex(contentID)
 	content.Detail = detail
 	content.OwnID = bson.ObjectIdHex(ownID)
 	content.PublishDate = time.Now().Unix() * 1000
-	content.LikeNum = 0
+	content.LikeNum = old.LikeNum
 	content.Public = isPublic
 	content.Tag = tag
 	err = m.DB.UpdateId(bson.ObjectIdHex(contentID), content)
-	if err != nil {
-		return err
-	}
-
-	err = m.DBuser.UpdateId(bson.ObjectIdHex(ownID), bson.M{"$inc": bson.M{"contentCount": 1}})
 	return err
 }
 
