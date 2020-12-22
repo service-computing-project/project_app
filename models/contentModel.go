@@ -151,13 +151,13 @@ func (m *ContentDB) GetContentSelf(id string, page, eachpage int) (res ContentLi
 	err = m.DB.Find(bson.M{"ownId": bson.ObjectIdHex(id)}).All(&c)
 	var start int
 	var end int
-	if len(c) > (page-1)*eachpage {
+	if len(c) < (page-1)*eachpage {
 		err = errors.New(StatusContentOutofRange)
 		return
 	} else {
 		start = (page - 1) * eachpage
 	}
-	if len(c) < page*eachpage {
+	if len(c) > page*eachpage {
 		end = page * eachpage
 	} else {
 		end = len(c)

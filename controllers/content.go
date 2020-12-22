@@ -106,8 +106,8 @@ func (c *ContentController) GetPublic() (res models.ContentPublicList) {
 	return
 }
 
-//GetUsercontentBy GET /api/content/usercontent/{userID:string} 获取指定用户的所有内容
-func (c *ContentController) GetUsercontentBy(userID string) (res models.ContentListByUser) {
+//GetUsercontentBy GET /api/content/texts/{userID:string} 获取指定用户的所有内容
+func (c *ContentController) GetTextsBy(userID string) (res models.ContentListByUser) {
 	var contentlistbyuserres models.ContentListByUser
 	var err error
 	params := PageParams{}
