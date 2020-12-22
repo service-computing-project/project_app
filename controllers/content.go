@@ -245,7 +245,7 @@ func (c *ContentController) PostUpdate() (res models.CommonRes) {
 	if err1 != nil {
 		res.State = err1.Error()
 	} else {
-		res.Data = id.(string)
+		res.Data = req.ID
 		res.State = models.StatusSuccess
 	}
 	return
