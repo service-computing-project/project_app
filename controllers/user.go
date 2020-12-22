@@ -84,6 +84,11 @@ func (c *UsersController) PostLogin() (res models.CommonRes) {
 	return
 }
 
+//OptionsLogout Options user/logout 退出登陆
+func (c *UsersController) OptionsLogout() {
+	return
+}
+
 //PostLogout POST /user/logout 退出登陆
 func (c *UsersController) PostLogout() (res models.CommonRes) {
 	fmt.Println(c.Session)
@@ -134,6 +139,11 @@ func (c *UsersController) PostName() (res models.CommonRes) {
 	} else {
 		res.State = models.StatusSuccess
 	}
+	return
+}
+
+//OptionsInfoBy OPTIONS /user/info/{userID:string}
+func (c *UsersController) OptionsInfoBy(id string) {
 	return
 }
 
