@@ -4,7 +4,7 @@
  * @Author: sunylin
  * @Date: 2020-12-14 23:13:17
  * @LastEditors: sunylin
- * @LastEditTime: 2020-12-21 22:06:08
+ * @LastEditTime: 2020-12-22 19:19:22
  */
 package models
 
@@ -130,7 +130,7 @@ type Like struct {
 //Notificationres 通知集合
 type Notificationres struct {
 	Notification NotificationDetail
-	SourceInfo  ContentUserInfo
+	User         ContentUserInfo
 }
 
 //UserNotificationres 响应用户通知集合
