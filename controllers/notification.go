@@ -4,7 +4,7 @@
  * @Author: sunylin
  * @Date: 2020-12-20 22:54:43
  * @LastEditors: sunylin
- * @LastEditTime: 2020-12-21 00:15:08
+ * @LastEditTime: 2020-12-22 13:07:04
  */
 package controllers
 
@@ -25,6 +25,10 @@ type NotificationController struct {
 // 	Page   int   `url:"page"`
 // 	PerPage int  `url:"per_page"`
 // }
+//OptionsAll OPTIONS /api/notification/all  获取用户所有通知
+func (c *NotificationController) OptionsAll() (res models.UserNotificationres) {
+	return
+}
 
 //GetAll GET /api/notification/all  获取用户所有通知
 func (c *NotificationController) GetAll() (res models.UserNotificationres) {
@@ -40,6 +44,11 @@ func (c *NotificationController) GetAll() (res models.UserNotificationres) {
 	} else {
 		res.State = models.StatusSuccess
 	}
+	return
+}
+
+//OptionsBy OPTIONS /api/notificaiton/{NotificationID:string}  删除指定通知
+func (c *NotificationController) OptionsBy(notificationID string) {
 	return
 }
 
