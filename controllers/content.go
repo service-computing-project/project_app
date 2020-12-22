@@ -17,10 +17,12 @@ type ContentController struct {
 	Model   models.ContentDB
 	Session *sessions.Session
 }
+
 //OptionsDetailBy OPTIONS /api/content/detail/{contentID:string} 获取指定内容
-func (c *ContentController) OptionsDetailBy(contentID string){
+func (c *ContentController) OptionsDetailBy(contentID string) {
 	return
 }
+
 //GetDetailBy GET /api/content/detail/{contentID:string} 获取指定内容
 func (c *ContentController) GetDetailBy(contentID string) (res models.ContentDetailres) {
 	if c.Session.Get("id") == nil {
@@ -84,9 +86,8 @@ type PageParams struct {
 	PerPage int `url:"per_page"`
 }
 
-
 //OptionsPublic OPTIONS /api/content/public  获取公共内容
-func (c *ContentController) OptionsPublic(){
+func (c *ContentController) OptionsPublic() {
 	return
 }
 
@@ -116,7 +117,7 @@ func (c *ContentController) GetPublic() (res models.ContentPublicList) {
 }
 
 //OptionsTextsBy OPTIONS /api/content/texts/{userID:string} 获取指定用户的所有内容
-func (c *ContentController) OptionsTextsBy(userID string){
+func (c *ContentController) OptionsTextsBy(userID string) {
 	return
 }
 
@@ -243,6 +244,7 @@ func (c *ContentController) PostUpdate() (res models.CommonRes) {
 	if err1 != nil {
 		res.State = err1.Error()
 	} else {
+		res.Data = id.(string)
 		res.State = models.StatusSuccess
 	}
 	return
