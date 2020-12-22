@@ -4,7 +4,7 @@
  * @Author: sunylin
  * @Date: 2020-12-15 02:41:11
  * @LastEditors: sunylin
- * @LastEditTime: 2020-12-16 00:48:32
+ * @LastEditTime: 2020-12-22 10:18:36
  */
 package models
 
@@ -147,7 +147,7 @@ func (m *UserDB) Login(username, pwd string) (string, error) {
 
 //Register 注册
 func (m *UserDB) Register(username, pwd, email string) (err error) {
-	_, err = m.AddUser(email, pwd, username, "", "个性签名", 0)
+	_, err = m.AddUser(email, pwd, username, "https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=1763861859,2626066999&fm=26&gp=0.jpg", "个性签名", 0)
 	if err != nil {
 		return err
 	}
