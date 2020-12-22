@@ -4,7 +4,7 @@
  * @Author: sunylin
  * @Date: 2020-12-16 16:06:27
  * @LastEditors: sunylin
- * @LastEditTime: 2020-12-18 01:14:16
+ * @LastEditTime: 2020-12-22 15:50:18
  */
 package models
 
@@ -29,10 +29,10 @@ func (m *NotifiationDB) GetNotificationByUserID(id string) (res UserNotification
 	for _, value := range AllNotification {
 		var n Notificationres
 		var u User
-		err = m.DBuser.FindId(c.OwnID).One(&u)
-		res.User.Avatar = u.Info.Avatar
-		res.User.Gender = u.Info.Gender
-		res.User.Name = u.Info.Name
+		err = m.DBU.FindId(value.SourceID).One(&u)
+		n.User.Avatar = u.Info.Avatar
+		n.User.Gender = u.Info.Gender
+		n.User.Name = u.Info.Name
 		n.Notifiation = value
 		res.Notifications = append(res.Notifications, n)
 	}
