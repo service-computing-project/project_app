@@ -194,11 +194,11 @@ func (c *ContentController) PostText() (res models.CommonRes) {
 		res.State = models.StatusBadReq
 		return
 	}
-	err1 := c.Model.AddContent(req.Detail, req.Tags, id.(string), req.IsPublic)
+	cid, err1 := c.Model.AddContent(req.Detail, req.Tags, id.(string), req.IsPublic)
 	if err1 != nil {
 		res.State = err1.Error()
 	} else {
-		res.Data = id.(string)
+		res.Data = cid
 		res.State = models.StatusSuccess
 	}
 	return
