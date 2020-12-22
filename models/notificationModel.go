@@ -28,11 +28,12 @@ func (m *NotifiationDB) GetNotificationByUserID(id string) (res UserNotification
 	}
 	for _, value := range AllNotification {
 		var n Notificationres
+		var u User
+		err = m.DBuser.FindId(c.OwnID).One(&u)
+		res.User.Avatar = u.Info.Avatar
+		res.User.Gender = u.Info.Gender
+		res.User.Name = u.Info.Name
 		n.Notifiation = value
-		err = m.DBU.FindId(n.Notifiation.SourceID).Select(bson.M{"info.name": 1, "info.avatar": 1, "info.gender": 1}).One(&n.SourceInfo)
-		if err != nil {
-			return
-		}
 		res.Notifications = append(res.Notifications, n)
 	}
 	return

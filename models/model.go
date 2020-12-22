@@ -130,7 +130,7 @@ type Like struct {
 //Notificationres 通知集合
 type Notificationres struct {
 	Notifiation NotificationDetail
-	SourceInfo  ContentUserInfo
+	User ContentUserInfo
 }
 
 //UserNotificationres 响应用户通知集合
